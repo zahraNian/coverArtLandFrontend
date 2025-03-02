@@ -17,7 +17,7 @@ const NewsLetterSection = () => {
         STAY UP TO DATE ABOUT OUR LATEST OFFERS
       </p>
       <div className="flex items-center">
-        <div className="flex flex-col max-w-[349px] mx-auto">
+        <div className="flex flex-col w-full max-w-[349px] mx-auto">
           <InputGroup className="flex bg-white mb-[14px]">
             <InputGroup.Text>
               <Image
