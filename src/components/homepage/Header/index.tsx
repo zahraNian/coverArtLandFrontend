@@ -1,7 +1,4 @@
-import AnimatedCounter from "@/components/ui/AnimatedCounter";
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { integralCF } from "@/styles/fonts";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -9,7 +6,7 @@ import * as motion from "framer-motion/client";
 
 const Header = () => {
   return (
-    <header className="bg-[#F2F0F1] pt-10 md:pt-24 overflow-hidden">
+    <header className="bg-[#F2F0F1] py-10 md:pt-24 overflow-hidden">
       <div className="md:max-w-frame mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
         <section className="max-w-frame px-4">
           <motion.h2
@@ -18,11 +15,12 @@ const Header = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className={cn([
-              integralCF.className,
-              "text-3xl lg:text-[64px] lg:leading-[64px] mb-5 lg:mb-8",
+              "text-3xl lg:text-[64px] lg:leading-[64px] mb-5 lg:mb-8 font-bold",
             ])}
           >
-            Unique Album Cover Art
+            Unique
+            <br />
+            Album Cover Art
           </motion.h2>
           <motion.p
             initial={{ y: "100px", opacity: 0 }}
@@ -75,16 +73,50 @@ const Header = () => {
           initial={{ y: "100px", opacity: 0, rotate: 10 }}
           whileInView={{ y: "0", opacity: 1, rotate: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 2.3, duration: 0.8 }}
-          className="relative md:px-4 min-h-[448px] md:min-h-[428px]"
+          transition={{ delay: 2, duration: 0.5 }}
         >
-          <Image
-            priority
-            src="https://www.shutterstock.com/image-illustration/us-them-wooden-signpost-3d-260nw-1777930403.jpg"
-            height={448}
-            width={500}
-            alt="first-cover"
-          />
+          <div className="grid grid-cols-2">
+            <div className="space-y-4">
+              <Image
+                unoptimized
+                priority
+                className="rounded-xl"
+                src="/images/pic1.png"
+                height={748}
+                width={500}
+                alt="first-cover"
+              />
+              <Image
+                unoptimized
+                priority
+                className="rounded-xl"
+                src="/images/pic7.png"
+                height={748}
+                width={500}
+                alt="first-cover"
+              />
+            </div>
+            <div className="mt-4 space-y-4">
+              <Image
+                unoptimized
+                priority
+                className="ml-4 rounded-xl"
+                src="/images/pic5.png"
+                height={748}
+                width={500}
+                alt="first-cover"
+              />
+              <Image
+                unoptimized
+                priority
+                className="ml-4 rounded-xl"
+                src="/images/pic15.png"
+                height={748}
+                width={500}
+                alt="first-cover"
+              />
+            </div>
+          </div>
         </motion.section>
       </div>
     </header>

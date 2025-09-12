@@ -27,8 +27,7 @@ const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps)
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className={cn([
-          integralCF.className,
-          "text-[32px] md:text-5xl mb-8 md:mb-14 capitalize",
+          "text-[32px] md:text-5xl mb-2 md:mb-4 capitalize font-semibold",
         ])}
       >
         {title}
@@ -39,8 +38,7 @@ const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps)
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className={cn([
-          integralCF.className,
-          "text-black/50 text-sm lg:text-base mb-6 lg:mb-8 max-w-[545px]",
+          "text-black/50 text-base lg:text-lg mb-6 lg:mb-8",
         ])}
       >
         {desc}

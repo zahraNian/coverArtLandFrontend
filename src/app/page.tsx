@@ -1,5 +1,4 @@
 import ProductListSec from "@/components/common/ProductListSec";
-import DressStyle from "@/components/homepage/DressStyle";
 import Header from "@/components/homepage/Header";
 import Reviews from "@/components/homepage/Reviews";
 import { Product } from "@/types/product.types";
@@ -226,10 +225,7 @@ export default function Home() {
             viewAllLink="/shop#top-selling"
           />
         </div>
-        <div className="mb-[50px] sm:mb-20">
-          <DressStyle />
-        </div>
-        <Reviews data={reviewsData} />
+        {/* <Reviews data={reviewsData} /> */}
       </main>
     </>
   );
