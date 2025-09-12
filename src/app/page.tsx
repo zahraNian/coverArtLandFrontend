@@ -1,8 +1,49 @@
 import ProductListSec from "@/components/common/ProductListSec";
+import ProductGenreList from "@/components/common/ProductGenreList";
 import Header from "@/components/homepage/Header";
-import Reviews from "@/components/homepage/Reviews";
+// import Reviews from "@/components/homepage/Reviews";
 import { Product } from "@/types/product.types";
+import { GenreItem } from "@/types/productGenre.types";
 import { Review } from "@/types/review.types";
+
+export const genreItems: GenreItem[] = [
+  {
+    id: 1,
+    title: "Electronic",
+    srcUrl: "/images/pic5.png",
+    designCount: 134
+  },
+  {
+    id: 2,
+    title: "Rock",
+    srcUrl: "/images/pic6.png",
+    designCount: 104
+  },
+  {
+    id: 3,
+    title: "Jazz",
+    srcUrl: "/images/pic7.png",
+    designCount: 63
+  },
+  {
+    id: 4,
+    title: "Abstract",
+    srcUrl: "/images/pic8.png",
+    designCount: 93
+  },
+  {
+    id: 5,
+    title: "Abstract",
+    srcUrl: "/images/pic8.png",
+    designCount: 454
+  },
+  {
+    id: 6,
+    title: "Indie",
+    srcUrl: "/images/pic8.png",
+    designCount: 34
+  },
+];
 
 export const newArrivalsData: Product[] = [
   {
@@ -208,9 +249,17 @@ export default function Home() {
     <>
       <Header />
       <main className="my-[50px] sm:my-[72px]">
-        <ProductListSec
+        <div className="mb-[50px] sm:mb-20">
+        <ProductGenreList
           title="Browse by Genre"
           desc="Browse designs by genre to find the perfect style for your music."
+          data={genreItems}
+          viewAllLink="/shop#new-arrivals"
+        />
+        </div>
+        <ProductListSec
+          title="Featured Designs"
+          desc="Original album cover designs crafted to capture the essence of your music."
           data={newArrivalsData}
           viewAllLink="/shop#new-arrivals"
         />
@@ -219,8 +268,8 @@ export default function Home() {
         </div>
         <div className="mb-[50px] sm:mb-20">
           <ProductListSec
-            title="top selling"
-            desc="Browse designs by genre to find the perfect style for your music."
+            title="All Designs"
+            desc="Original album cover designs crafted to capture the essence of your music."
             data={topSellingData}
             viewAllLink="/shop#top-selling"
           />

@@ -6,14 +6,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import ProductCard from "./ProductCard";
-import { Product } from "@/types/product.types";
+import GenreCard from "./GenreCard";
+import { GenreItem } from "@/types/productGenre.types";
 import Link from "next/link";
 
 type ProductListSecProps = {
   title: string;
   desc: string;
-  data: Product[];
+  data: GenreItem[];
   viewAllLink?: string;
 };
 
@@ -60,7 +60,7 @@ const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps)
                 key={product.id}
                 className="w-full max-w-[198px] sm:max-w-[295px] pl-0"
               >
-                <ProductCard data={product} />
+                <GenreCard data={product} />
               </CarouselItem>
             ))}
           </CarouselContent>
