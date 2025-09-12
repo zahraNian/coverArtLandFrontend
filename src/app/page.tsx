@@ -1,5 +1,4 @@
 import ProductListSec from "@/components/common/ProductListSec";
-import Brands from "@/components/homepage/Brands";
 import DressStyle from "@/components/homepage/DressStyle";
 import Header from "@/components/homepage/Header";
 import Reviews from "@/components/homepage/Reviews";
@@ -209,10 +208,10 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Brands />
       <main className="my-[50px] sm:my-[72px]">
         <ProductListSec
-          title="NEW ARRIVALS"
+          title="Browse by Genre"
+          desc="Browse designs by genre to find the perfect style for your music."
           data={newArrivalsData}
           viewAllLink="/shop#new-arrivals"
         />
@@ -222,6 +221,7 @@ export default function Home() {
         <div className="mb-[50px] sm:mb-20">
           <ProductListSec
             title="top selling"
+            desc="Browse designs by genre to find the perfect style for your music."
             data={topSellingData}
             viewAllLink="/shop#top-selling"
           />

@@ -17,54 +17,23 @@ import CartBtn from "./CartBtn";
 const data: NavMenu = [
   {
     id: 1,
-    label: "Shop",
-    type: "MenuList",
-    children: [
-      {
-        id: 11,
-        label: "Men's clothes",
-        url: "/shop#men-clothes",
-        description: "In attractive and spectacular colors and designs",
-      },
-      {
-        id: 12,
-        label: "Women's clothes",
-        url: "/shop#women-clothes",
-        description: "Ladies, your style and tastes are important to us",
-      },
-      {
-        id: 13,
-        label: "Kids clothes",
-        url: "/shop#kids-clothes",
-        description: "For all ages, with happy and beautiful colors",
-      },
-      {
-        id: 14,
-        label: "Bags and Shoes",
-        url: "/shop#bag-shoes",
-        description: "Suitable for men, women and all tastes and styles",
-      },
-    ],
+    type: "MenuItem",
+    label: "Home",
+    url: "/",
+    children: [],
   },
   {
     id: 2,
     type: "MenuItem",
-    label: "On Sale",
-    url: "/shop#on-sale",
+    label: "Browse All",
+    url: "/shop#search",
     children: [],
   },
   {
     id: 3,
     type: "MenuItem",
-    label: "New Arrivals",
-    url: "/shop#new-arrivals",
-    children: [],
-  },
-  {
-    id: 4,
-    type: "MenuItem",
-    label: "Brands",
-    url: "/shop#brands",
+    label: "About",
+    url: "/about",
     children: [],
   },
 ];
@@ -84,7 +53,7 @@ const TopNavbar = () => {
               "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10",
             ])}
           >
-            SHOP.CO
+            ArtVinyl
           </Link>
         </div>
         <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
@@ -115,7 +84,7 @@ const TopNavbar = () => {
           <InputGroup.Input
             type="search"
             name="search"
-            placeholder="Search for products..."
+            placeholder="Search for designs..."
             className="bg-transparent placeholder:text-black/40"
           />
         </InputGroup>

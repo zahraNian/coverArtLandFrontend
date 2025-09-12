@@ -13,11 +13,12 @@ import Link from "next/link";
 
 type ProductListSecProps = {
   title: string;
+  desc: string;
   data: Product[];
   viewAllLink?: string;
 };
 
-const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
+const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps) => {
   return (
     <section className="max-w-frame mx-auto text-center">
       <motion.h2
@@ -32,6 +33,18 @@ const ProductListSec = ({ title, data, viewAllLink }: ProductListSecProps) => {
       >
         {title}
       </motion.h2>
+      <motion.p
+        initial={{ y: "100px", opacity: 0 }}
+        whileInView={{ y: "0", opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className={cn([
+          integralCF.className,
+          "text-black/50 text-sm lg:text-base mb-6 lg:mb-8 max-w-[545px]",
+        ])}
+      >
+        {desc}
+      </motion.p>
       <motion.div
         initial={{ y: "100px", opacity: 0 }}
         whileInView={{ y: "0", opacity: 1 }}
