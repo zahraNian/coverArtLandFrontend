@@ -3,4 +3,5 @@ export type GenreItem = {
   title: string;
   srcUrl: string;
   designCount: number
+  iconClass: string,
 };

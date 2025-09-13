@@ -10,37 +10,43 @@ export const genreItems: GenreItem[] = [
   {
     id: 1,
     title: "Electronic",
-    srcUrl: "/images/pic5.png",
+    srcUrl: "/icons/zap.svg",
+    iconClass: "bg-blue-500",
     designCount: 134
   },
   {
     id: 2,
     title: "Rock",
-    srcUrl: "/images/pic6.png",
+    srcUrl: "/icons/volume.svg",
+    iconClass: "bg-red-500",
     designCount: 104
   },
   {
     id: 3,
     title: "Jazz",
-    srcUrl: "/images/pic7.png",
+    srcUrl: "/icons/music.svg",
+    iconClass: "bg-yellow-500",
     designCount: 63
   },
   {
     id: 4,
     title: "Abstract",
-    srcUrl: "/images/pic8.png",
+    srcUrl: "/icons/palette.svg",
+    iconClass: "bg-purple-500",
     designCount: 93
   },
   {
     id: 5,
-    title: "Abstract",
-    srcUrl: "/images/pic8.png",
+    title: "Vintage",
+    srcUrl: "/icons/clock.svg",
+    iconClass: "bg-orange-500",
     designCount: 454
   },
   {
     id: 6,
     title: "Indie",
-    srcUrl: "/images/pic8.png",
+    srcUrl: "/icons/heart.svg",
+    iconClass: "bg-pink-500",
     designCount: 34
   },
 ];
@@ -254,14 +260,12 @@ export default function Home() {
           title="Browse by Genre"
           desc="Browse designs by genre to find the perfect style for your music."
           data={genreItems}
-          viewAllLink="/shop#new-arrivals"
         />
         </div>
         <ProductListSec
           title="Featured Designs"
           desc="Original album cover designs crafted to capture the essence of your music."
           data={newArrivalsData}
-          viewAllLink="/shop#new-arrivals"
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
           <hr className="h-[1px] border-t-black/10 my-10 sm:my-16" />
@@ -271,7 +275,6 @@ export default function Home() {
             title="All Designs"
             desc="Original album cover designs crafted to capture the essence of your music."
             data={topSellingData}
-            viewAllLink="/shop#top-selling"
           />
         </div>
         {/* <Reviews data={reviewsData} /> */}
