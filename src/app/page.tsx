@@ -63,6 +63,7 @@ export const newArrivalsData: Product[] = [
       percentage: 0,
     },
     rating: 4.5,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 2,
@@ -75,18 +76,20 @@ export const newArrivalsData: Product[] = [
       percentage: 20,
     },
     rating: 3.5,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 3,
     title: "Chechered Shirt",
     srcUrl: "/images/pic3.png",
-    gallery: ["/images/pic3.png"],
+    gallery: ["/images/pic3.png", "/images/pic10.png", "/images/pic11.png", "/images/pic12.png"],
     price: 180,
     discount: {
       amount: 0,
       percentage: 0,
     },
     rating: 4.5,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 4,
@@ -99,6 +102,7 @@ export const newArrivalsData: Product[] = [
       percentage: 30,
     },
     rating: 4.5,
+    tags: ["Pop", "Electronic"]
   },
 ];
 
@@ -114,6 +118,7 @@ export const topSellingData: Product[] = [
       percentage: 20,
     },
     rating: 5.0,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 6,
@@ -126,6 +131,7 @@ export const topSellingData: Product[] = [
       percentage: 0,
     },
     rating: 4.0,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 7,
@@ -138,6 +144,7 @@ export const topSellingData: Product[] = [
       percentage: 0,
     },
     rating: 3.0,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 8,
@@ -150,6 +157,7 @@ export const topSellingData: Product[] = [
       percentage: 0,
     },
     rating: 4.5,
+    tags: ["Pop", "Electronic"]
   },
 ];
 
@@ -165,6 +173,7 @@ export const relatedProductData: Product[] = [
       percentage: 20,
     },
     rating: 4.0,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 13,
@@ -177,6 +186,7 @@ export const relatedProductData: Product[] = [
       percentage: 0,
     },
     rating: 3.5,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 14,
@@ -189,6 +199,7 @@ export const relatedProductData: Product[] = [
       percentage: 0,
     },
     rating: 4.5,
+    tags: ["Pop", "Electronic"]
   },
   {
     id: 15,
@@ -201,6 +212,7 @@ export const relatedProductData: Product[] = [
       percentage: 30,
     },
     rating: 5.0,
+    tags: ["Pop", "Electronic"]
   },
 ];
 

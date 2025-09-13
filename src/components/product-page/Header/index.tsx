@@ -1,11 +1,8 @@
 import React from "react";
 import PhotoSection from "./PhotoSection";
 import { Product } from "@/types/product.types";
-import { integralCF } from "@/styles/fonts";
 import { cn } from "@/lib/utils";
 import Rating from "@/components/ui/Rating";
-import ColorSelection from "./ColorSelection";
-import SizeSelection from "./SizeSelection";
 import AddToCardSection from "./AddToCardSection";
 
 const Header = ({ data }: { data: Product }) => {
@@ -18,8 +15,7 @@ const Header = ({ data }: { data: Product }) => {
         <div>
           <h1
             className={cn([
-              integralCF.className,
-              "text-2xl md:text-[40px] md:leading-[40px] mb-3 md:mb-3.5 capitalize",
+              "md:text-xl mb-3 md:mb-3.5 capitalize",
             ])}
           >
             {data.title}
@@ -37,6 +33,20 @@ const Header = ({ data }: { data: Product }) => {
               {data.rating.toFixed(1)}
               <span className="text-black/60">/5</span>
             </span>
+          </div>
+          <div className="flex items-center space-x-2.5 sm:space-x-3 mb-5">
+            {data?.tags && data.tags.length > 0 && (
+              <div className="flex space-x-3 w-full lg:w-fit items-center lg:justify-start justify-center">
+                {data.tags.map((tag, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-100 rounded-full px-3 py-1"
+                  >
+                    {tag}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex items-center space-x-2.5 sm:space-x-3 mb-5">
             {data.discount.percentage > 0 ? (
@@ -80,10 +90,6 @@ const Header = ({ data }: { data: Product }) => {
             This graphic t-shirt which is perfect for any occasion. Crafted from
             a soft and breathable fabric, it offers superior comfort and style.
           </p>
-          <hr className="h-[1px] border-t-black/10 mb-5" />
-          <ColorSelection />
-          <hr className="h-[1px] border-t-black/10 my-5" />
-          <SizeSelection />
           <hr className="hidden md:block h-[1px] border-t-black/10 my-5" />
           <AddToCardSection data={data} />
         </div>

@@ -13,43 +13,36 @@ type FaqItem = {
 
 const faqsData: FaqItem[] = [
   {
-    question: "What is the material of the t-shirt?",
+    question: "What is the ?",
     answer:
-      "Provide details about the fabric type (e.g., cotton, polyester, blend), weight, and any specific features.",
+      "I dont know.",
   },
   {
-    question: "What are the care instructions for the t-shirt?",
+    question: "What is the ?",
     answer:
-      "Outline recommended washing, drying, and ironing methods to maintain quality and longevity.",
+      "I dont know.",
   },
   {
-    question: "What is the design or print on the t-shirt made of?",
+    question: "What is the ?",
     answer:
-      "Explain the material used for the design (e.g., vinyl, screen print, embroidery) and its durability.",
+      "I dont know.",
   },
   {
-    question: "Is the t-shirt unisex or designed for specific genders?",
+    question: "What is the ?",
     answer:
-      "Indicate whether the shirt is suitable for both men and women or targeted towards a particular gender.",
-  },
-  {
-    question: "What are the shipping options and costs?",
-    answer:
-      "Provide information about shipping methods, estimated delivery times, and associated fees.",
-  },
-  {
-    question: "What is the return policy for the t-shirt?",
-    answer:
-      "Outline the return window, conditions, and refund or exchange procedures.",
+      "I dont know.",
   },
 ];
 
 const FaqContent = () => {
   return (
     <section>
-      <h3 className="text-xl sm:text-2xl font-bold text-black mb-5 sm:mb-6">
+      <h3 className="text-lg sm:text-xl font-bold text-black mb-3 sm:mb-1">
         Frequently asked questions
       </h3>
+      <p className="text-base sm:text-lg text-gray-400 mb-5 sm:mb-6">
+        Find answers to common questions about this design
+      </p>
       <Accordion type="single" collapsible>
         {faqsData.map((faq, idx) => (
           <AccordionItem key={idx} value={`item-${idx + 1}`}>

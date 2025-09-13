@@ -12,7 +12,7 @@ import Link from "next/link";
 
 type ProductListSecProps = {
   title: string;
-  desc: string;
+  desc?: string;
   data: Product[];
   viewAllLink?: string;
 };
@@ -31,17 +31,19 @@ const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps)
       >
         {title}
       </motion.h2>
-      <motion.p
-        initial={{ y: "100px", opacity: 0 }}
-        whileInView={{ y: "0", opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className={cn([
-          "text-black/50 text-base lg:text-lg mb-6 lg:mb-8",
-        ])}
-      >
-        {desc}
-      </motion.p>
+      {desc && (
+        <motion.p
+          initial={{ y: "100px", opacity: 0 }}
+          whileInView={{ y: "0", opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className={cn([
+            "text-black/50 text-base lg:text-lg mb-6 lg:mb-8",
+          ])}
+        >
+          {desc}
+        </motion.p>
+      )}
       <motion.div
         initial={{ y: "100px", opacity: 0 }}
         whileInView={{ y: "0", opacity: 1 }}

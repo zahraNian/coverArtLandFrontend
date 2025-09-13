@@ -11,7 +11,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
   return (
     <Link
       href={`/shop/product/${data.id}/${data.title.split(" ").join("-")}`}
-      className="flex flex-col items-center aspect-auto border rounded-xl p-8 hover:bg-slate-50"
+      className="flex flex-col items-center aspect-auto border rounded-xl py-8 px-3 hover:bg-slate-50"
     >
       <div className={`${data.iconClass} w-10 h-10 rounded-md flex justify-center items-center`}>
         <Image
