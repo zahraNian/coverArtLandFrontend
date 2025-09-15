@@ -9,7 +9,7 @@ const PhotoSection = ({ data }: { data: Product }) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-center bg-[#F0EEED] rounded-[13px] sm:rounded-[20px] w-full sm:w-96 md:w-full mx-auto h-full max-h-[530px] min-h-[330px] lg:min-h-[380px] xl:min-h-[530px] overflow-hidden mb-3 lg:mb-0">
+      <div className="flex items-center justify-center bg-[#F0EEED] rounded-lg w-full sm:w-96 md:w-full mx-auto h-full max-h-[530px] min-h-[330px] lg:min-h-[380px] xl:min-h-[530px] overflow-hidden mb-3 lg:mb-0">
         <Image
           src={selected}
           width={444}
@@ -26,14 +26,14 @@ const PhotoSection = ({ data }: { data: Product }) => {
             <button
               key={index}
               type="button"
-              className="bg-[#F0EEED] rounded-[13px] xl:rounded-[20px] w-full max-w-[70px] xl:max-w-[90px] max-h-[70px] xl:max-h-[90px] xl:min-h-[70px] aspect-square overflow-hidden"
+              className="bg-[#F0EEED] rounded-lg w-full max-w-[70px] xl:max-w-[90px] max-h-[70px] xl:max-h-[90px] xl:min-h-[70px] aspect-square overflow-hidden"
               onClick={() => setSelected(photo)}
             >
               <Image
                 src={photo}
                 width={90}
                 height={90}
-                className="rounded-md w-full h-full object-cover hover:scale-110 transition-all duration-500"
+                className="rounded-lg w-full h-full object-cover hover:scale-110 transition-all duration-500"
                 alt={data.title}
                 priority
               />
