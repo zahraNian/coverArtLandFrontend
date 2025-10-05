@@ -5,8 +5,8 @@ import { useState } from "react";
 const CoverCustomizeForm = () => {
     const [checked, setChecked] = useState(false);
     return (
-        <div className="border rounded-lg flex flex-col p-4">
-            <span className="text-lg">Customize Your Design</span>
+        <div className="flex flex-col">
+            <span className="text-xl text-gray-700 font-semibold">Customize Your Design</span>
             <span className="text-gray-500 mt-1 mb-6">Add your own text and select additional options to personalize this design</span>
             <div className="flex flex-col xl:flex-row gap-y-3 w-full justify-between">
                 <div className="xl:w-[47%] flex flex-col gap-y-3">
