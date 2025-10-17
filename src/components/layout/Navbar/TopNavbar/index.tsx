@@ -30,8 +30,15 @@ const data: NavMenu = [
     url: "/shop#search",
     children: [],
   },
-  {
+    {
     id: 3,
+    type: "MenuItem",
+    label: "Blog",
+    url: "/blog",
+    children: [],
+  },
+  {
+    id: 4,
     type: "MenuItem",
     label: "About",
     url: "/about",

@@ -112,7 +112,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
               )
             )}
           </div>
-          <CartCounter
+          {/* <CartCounter
             initialValue={data.quantity}
             onAdd={() => dispatch(addToCart({ ...data, quantity: 1 }))}
             onRemove={() =>
@@ -130,7 +130,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             }
             isZeroDelete
             className="px-5 py-3 max-h-8 md:max-h-10 min-w-[105px] max-w-[105px] sm:max-w-32"
-          />
+          /> */}
         </div>
       </div>
     </div>

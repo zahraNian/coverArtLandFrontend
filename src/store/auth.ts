@@ -1,4 +1,7 @@
-import { create } from 'zustand'
+"use client"
+
+import { create } from "zustand"
+import { createApiClient, ApiError } from "@/lib/api"
 
 interface User {
     id: string
@@ -13,39 +16,66 @@ interface AuthState {
     login: (email: string, password: string) => Promise<void>
     logout: () => void
     setUser: (user: User | null) => void
+    initFromStorage: () => void
 }
+
+const api = createApiClient({
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE || "/api",
+})
 
 export const useAuthStore = create<AuthState>((set) => ({
     user: null,
     loading: false,
 
-    setUser: (user) => set({ user }),
+    setUser: (user) => {
+        set({ user })
+        if (typeof window !== "undefined") {
+            if (user) localStorage.setItem("user", JSON.stringify(user))
+            else localStorage.removeItem("user")
+        }
+    },
+
+    initFromStorage: () => {
+        if (typeof window === "undefined") return
+        try {
+            const stored = localStorage.getItem("user")
+            if (stored) {
+                const user: User = JSON.parse(stored)
+                set({ user })
+            }
+        } catch {
+            // ignore
+        }
+    },
 
     login: async (email, password) => {
         set({ loading: true })
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+            const data = await api.raw.post<{ user: User }>("/auth/login", {
+                email,
+                password,
             })
 
-            if (!res.ok) throw new Error('Login failed')
-
-            const data = await res.json()
-
-            set({ user: data.user, loading: false })
-
-            localStorage.setItem('user', JSON.stringify(data.user))
-        } catch (error) {
-            console.error(error)
+            const user = data.user
+            localStorage.setItem("token", user.token)
+            localStorage.setItem("user", JSON.stringify(user))
+            set({ user, loading: false })
+        } catch (err) {
+            console.error("Login error:", err)
             set({ loading: false })
-            throw error
+
+            if (err instanceof ApiError) {
+                throw new Error(err.data?.message || "Login failed")
+            }
+            throw err
         }
     },
 
     logout: () => {
-        localStorage.removeItem('user')
+        if (typeof window !== "undefined") {
+            localStorage.removeItem("token")
+            localStorage.removeItem("user")
+        }
         set({ user: null })
     },
 }))
