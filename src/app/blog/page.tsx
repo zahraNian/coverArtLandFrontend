@@ -9,11 +9,9 @@ import {
 } from "@/components/ui/pagination";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 async function fetchBlogs(page: number, pageSize: number) {
   // NOTE: Using fake data locally for now. When API is ready, restore the fetch below.
-  // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/blogs?page=${page}&pageSize=${pageSize}`,
+  // const res = await fetch(`,
   //   { cache: "no-store" }
   // );
   // if (!res.ok) throw new Error("Failed to fetch blogs");
@@ -107,7 +105,7 @@ export default async function BlogPLPPage({ searchParams }: { searchParams?: { p
                 {p === "..." ? (
                   <span className="px-3 py-2 text-sm">...</span>
                 ) : (
-                  <PaginationLink asChild isActive={p === pagination.page}>
+                  <PaginationLink isActive={p === pagination.page}>
                     <Link href={`/blog?page=${p}&pageSize=${pagination.pageSize}`}>{p}</Link>
                   </PaginationLink>
                 )}

@@ -1,4 +1,4 @@
-export default function MyAccount(user) {
+export default function MyAccount(user: any) {
   if (!user) {
     return (
       <div className="p-4 text-center text-sm text-gray-500 border rounded-xl bg-gray-50">

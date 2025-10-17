@@ -24,7 +24,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     setLoading(true)
     try {
       await new Promise((r) => setTimeout(r, 800)) // mock delay
-      setUser({ id: '1', name: 'John Doe', email })
+      setUser({ id: '1', name: 'John Doe', email, token: '123' })
       onOpenChange(false)
     } catch (err) {
       console.error(err)

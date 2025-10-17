@@ -22,7 +22,7 @@ const tabBtnData: TabBtn[] = [
   },
 ];
 
-const Tabs = (user) => {
+const Tabs = (user: any) => {
   const [active, setActive] = useState<number>(1);
 
   return (
