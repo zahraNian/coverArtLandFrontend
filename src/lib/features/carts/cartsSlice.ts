@@ -61,64 +61,38 @@ export const cartsSlice = createSlice({
     addToCart: (state, action: PayloadAction<CartItem>) => {
       // if cart is empty then add
       if (state.cart === null) {
+        const quantityToAdd = 1;
+        const itemToAdd = { ...action.payload, quantity: quantityToAdd };
         state.cart = {
-          items: [action.payload],
-          totalQuantities: action.payload.quantity,
+          items: [itemToAdd],
+          totalQuantities: quantityToAdd,
         };
-        state.totalPrice =
-          state.totalPrice + action.payload.price * action.payload.quantity;
+        state.totalPrice = state.totalPrice + itemToAdd.price * quantityToAdd;
         state.adjustedTotalPrice =
           state.adjustedTotalPrice +
-          calcAdjustedTotalPrice(state.totalPrice, action.payload);
+          calcAdjustedTotalPrice(state.totalPrice, itemToAdd);
         return;
       }
 
-      // check item in cart
-      const isItemInCart = state.cart.items.find(
-        (item) =>
-          action.payload.id === item.id &&
-          compareArrays(action.payload.attributes, item.attributes)
+      // check product already in cart (by product id)
+      const existingById = state.cart.items.find(
+        (item) => action.payload.id === item.id
       );
 
-      if (isItemInCart) {
-        state.cart = {
-          ...state.cart,
-          items: state.cart.items.map((eachCartItem) => {
-            if (
-              eachCartItem.id === action.payload.id
-                ? !compareArrays(
-                    eachCartItem.attributes,
-                    isItemInCart.attributes
-                  )
-                : eachCartItem.id !== action.payload.id
-            )
-              return eachCartItem;
+      // If already exists, do not add again (enforce max 1 per product)
+      if (existingById) return;
 
-            return {
-              ...isItemInCart,
-              quantity: action.payload.quantity + isItemInCart.quantity,
-            };
-          }),
-          totalQuantities: state.cart.totalQuantities + action.payload.quantity,
-        };
-        state.totalPrice =
-          state.totalPrice + action.payload.price * action.payload.quantity;
-        state.adjustedTotalPrice =
-          state.adjustedTotalPrice +
-          calcAdjustedTotalPrice(state.totalPrice, action.payload);
-        return;
-      }
-
+      const quantityToAdd = 1;
+      const itemToAdd = { ...action.payload, quantity: quantityToAdd };
       state.cart = {
         ...state.cart,
-        items: [...state.cart.items, action.payload],
-        totalQuantities: state.cart.totalQuantities + action.payload.quantity,
+        items: [...state.cart.items, itemToAdd],
+        totalQuantities: state.cart.totalQuantities + quantityToAdd,
       };
-      state.totalPrice =
-        state.totalPrice + action.payload.price * action.payload.quantity;
+      state.totalPrice = state.totalPrice + itemToAdd.price * quantityToAdd;
       state.adjustedTotalPrice =
         state.adjustedTotalPrice +
-        calcAdjustedTotalPrice(state.totalPrice, action.payload);
+        calcAdjustedTotalPrice(state.totalPrice, itemToAdd);
     },
     removeCartItem: (state, action: PayloadAction<RemoveCartItem>) => {
       if (state.cart === null) return;
