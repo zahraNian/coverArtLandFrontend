@@ -54,8 +54,7 @@ const Footer = () => {
                 CoverArtLand
               </h1>
               <p className="text-black/60 text-sm mb-9">
-                We have clothes that suits your style and which you’re proud to
-                wear. From women to men.
+                Original album cover designs for musicians.
               </p>
               <div className="flex items-center">
                 {socialsData.map((social) => (
@@ -69,10 +68,7 @@ const Footer = () => {
                 ))}
               </div>
             </div>
-            <div className="hidden lg:grid col-span-9 lg:grid-cols-4 lg:pl-10">
-              <LinksSection />
-            </div>
-            <div className="grid lg:hidden grid-cols-2 sm:grid-cols-4">
+            <div className="grid grid-cols-2 lg:col-span-9 lg:pl-48">
               <LinksSection />
             </div>
           </nav>

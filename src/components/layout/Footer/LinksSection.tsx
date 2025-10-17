@@ -4,106 +4,35 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const footerLinksData: FooterLinks[] = [
+
   {
     id: 1,
-    title: "company",
+    title: "Quick Links",
     children: [
       {
-        id: 11,
-        label: "about",
+        id: 21,
+        label: "Browse Gallery",
         url: "#",
       },
       {
-        id: 12,
-        label: "features",
+        id: 23,
+        label: "Contact Us",
         url: "#",
       },
       {
-        id: 13,
-        label: "works",
-        url: "#",
-      },
-      {
-        id: 14,
-        label: "career",
+        id: 24,
+        label: "Privacy Policy",
         url: "#",
       },
     ],
   },
   {
     id: 2,
-    title: "help",
+    title: "company",
     children: [
       {
-        id: 21,
-        label: "customer support",
-        url: "#",
-      },
-      {
-        id: 22,
-        label: "delivery details",
-        url: "#",
-      },
-      {
-        id: 23,
-        label: "terms & conditions",
-        url: "#",
-      },
-      {
-        id: 24,
-        label: "privacy policy",
-        url: "#",
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "faq",
-    children: [
-      {
-        id: 31,
-        label: "account",
-        url: "#",
-      },
-      {
-        id: 32,
-        label: "manage deliveries",
-        url: "#",
-      },
-      {
-        id: 33,
-        label: "orders",
-        url: "#",
-      },
-      {
-        id: 34,
-        label: "payments",
-        url: "#",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "resources",
-    children: [
-      {
-        id: 41,
-        label: "Free eBooks",
-        url: "#",
-      },
-      {
-        id: 42,
-        label: "development tutorial",
-        url: "#",
-      },
-      {
-        id: 43,
-        label: "How to - Blog",
-        url: "#",
-      },
-      {
-        id: 44,
-        label: "youtube playlist",
+        id: 11,
+        label: "about",
         url: "#",
       },
     ],

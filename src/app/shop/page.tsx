@@ -1,3 +1,4 @@
+"use client";
 import BreadcrumbShop from "@/components/shop-page/BreadcrumbShop";
 
 import {
@@ -21,46 +22,111 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import GenreMultiSelect from "@/components/shop-page/controls/GenreMultiSelect";
+import PriceRangeSelect from "@/components/shop-page/controls/PriceRangeSelect";
+import SortSelect from "@/components/shop-page/controls/SortSelect";
+import ActiveFilters from "@/components/shop-page/controls/ActiveFilters";
+import { useMemo, useState } from "react";
 
 export default function ShopPage() {
+  const [search, setSearch] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const genreOptions = useMemo(
+    () => [
+      { label: "Casual", value: "casual" },
+      { label: "Formal", value: "formal" },
+      { label: "Sports", value: "sports" },
+      { label: "Outdoor", value: "outdoor" },
+      { label: "Accessories", value: "accessories" },
+    ],
+    []
+  );
+  const priceOptions = useMemo(
+    () => [
+      { label: "Under $50", value: "lt-50" },
+      { label: "$50 - $100", value: "50-100" },
+      { label: "$100 - $200", value: "100-200" },
+      { label: "$200+", value: "gt-200" },
+    ],
+    []
+  );
+  const sortOptions = useMemo(
+    () => [
+      { label: "Most Popular", value: "most-popular" },
+      { label: "Low Price", value: "low-price" },
+      { label: "High Price", value: "high-price" },
+      { label: "Newest", value: "newest" },
+    ],
+    []
+  );
+  const [genres, setGenres] = useState<string[]>([]);
+  const [price, setPrice] = useState<string | undefined>(undefined);
+  const [sort, setSort] = useState<string | undefined>("most-popular");
+
+  const activeGenreLabels = useMemo(
+    () => genreOptions.filter((g) => genres.includes(g.value)),
+    [genreOptions, genres]
+  );
+  const activePriceLabel = useMemo(
+    () => priceOptions.find((p) => p.value === price) || null,
+    [priceOptions, price]
+  );
+
+  function clearAll() {
+    setGenres([]);
+    setPrice(undefined);
+    setSort("most-popular");
+    setSearch("");
+  }
+
   return (
     <main className="pb-20">
       <div className="max-w-frame mx-auto px-4 xl:px-0">
         <hr className="h-[1px] border-t-black/10 mb-5 sm:mb-6" />
         <BreadcrumbShop />
         <div className="flex md:space-x-5 items-start">
-          <div className="hidden md:block min-w-[295px] max-w-[295px] border border-black/10 rounded-[20px] px-5 md:px-6 py-5 space-y-5 md:space-y-6">
-            <div className="flex items-center justify-between">
-              <span className="font-bold text-black text-xl">Filters</span>
-              <FiSliders className="text-2xl text-black/40" />
-            </div>
-            <Filters />
-          </div>
           <div className="flex flex-col w-full space-y-5">
+            <h1 className="font-bold text-2xl md:text-[32px]">All Designs</h1>
+            <div className="w-full">
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search products..."
+                className="h-11"
+              />
+            </div>
             <div className="flex flex-col lg:flex-row lg:justify-between">
-              <div className="flex items-center justify-between">
-                <h1 className="font-bold text-2xl md:text-[32px]">Casual</h1>
-                <MobileFilters />
+              <div className="flex flex-col sm:items-center sm:flex-row gap-3 sm:gap-4">
+                <SortSelect options={sortOptions} value={sort} onChange={setSort} />
+                <Button variant="outline" onClick={() => setShowFilters((s) => !s)} className="gap-2">
+                  <FiSliders className="text-base" /> Filters
+                </Button>
+                <Button variant="ghost" onClick={clearAll} className="text-black/70">Clear all</Button>
               </div>
-              <div className="flex flex-col sm:items-center sm:flex-row">
-                <span className="text-sm md:text-base text-black/60 mr-3">
-                  Showing 1-10 of 100 Products
-                </span>
-                <div className="flex items-center">
-                  Sort by:{" "}
-                  <Select defaultValue="most-popular">
-                    <SelectTrigger className="font-medium text-sm px-1.5 sm:text-base w-fit text-black bg-transparent shadow-none border-none">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="most-popular">Most Popular</SelectItem>
-                      <SelectItem value="low-price">Low Price</SelectItem>
-                      <SelectItem value="high-price">High Price</SelectItem>
-                    </SelectContent>
-                  </Select>
+            </div>
+            {showFilters && (
+              <div className="flex gap-3 sm:gap-4 border border-black/10 rounded-xl p-4">
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm text-black/60">Genre</span>
+                  <GenreMultiSelect options={genreOptions} value={genres} onChange={setGenres} />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm text-black/60">Price Range</span>
+                  <PriceRangeSelect options={priceOptions} value={price} onChange={setPrice} />
                 </div>
               </div>
-            </div>
+            )}
+            <ActiveFilters
+              genres={activeGenreLabels}
+              priceRange={activePriceLabel}
+              onRemove={(type, val) => {
+                if (type === "genre" && val) setGenres((prev) => prev.filter((v) => v !== val));
+                if (type === "price") setPrice(undefined);
+              }}
+              onClearAll={clearAll}
+            />
             <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
               {[
                 ...relatedProductData.slice(1, 4),
