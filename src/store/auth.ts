@@ -14,6 +14,7 @@ interface AuthState {
     user: User | null
     loading: boolean
     login: (email: string, password: string) => Promise<void>
+    register: (email: string, password: string, password_confirm: string) => Promise<void>
     logout: () => void
     setUser: (user: User | null) => void
     initFromStorage: () => void
@@ -65,7 +66,31 @@ export const useAuthStore = create<AuthState>((set) => ({
             set({ loading: false })
 
             if (err instanceof ApiError) {
-                throw new Error(err.data?.message || "Login failed")
+                throw new Error((err.data as any)?.message || err.message || "Login failed")
+            }
+            throw err
+        }
+    },
+
+    register: async (email, password, password_confirm) => {
+        set({ loading: true })
+        try {
+            const data = await api.raw.post<{ user: User }>("/auth/register", {
+                email,
+                password,
+                password_confirm,
+            })
+
+            const user = data.user
+            localStorage.setItem("token", user.token)
+            localStorage.setItem("user", JSON.stringify(user))
+            set({ user, loading: false })
+        } catch (err) {
+            console.error("Register error:", err)
+            set({ loading: false })
+
+            if (err instanceof ApiError) {
+                throw new Error((err.data as any)?.message || err.message || "Register failed")
             }
             throw err
         }

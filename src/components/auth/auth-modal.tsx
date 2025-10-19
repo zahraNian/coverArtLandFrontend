@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { useAuthStore } from '@/store/auth'
+import { showToast } from '@/lib/toast'
 
 interface AuthModalProps {
   open: boolean
@@ -13,23 +14,45 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ open, onOpenChange }: AuthModalProps) {
-  const { setUser } = useAuthStore()
+  const { login, register, loading } = useAuthStore()
   const [mode, setMode] = useState<'login' | 'signup'>('login')
-  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordConfirm, setPasswordConfirm] = useState('')
+
+  const isStrongPassword = (pwd: string) => {
+    // min 8 chars, uppercase, lowercase, number, special
+    const lengthOk = pwd.length >= 8
+    const upperOk = /[A-Z]/.test(pwd)
+    const lowerOk = /[a-z]/.test(pwd)
+    const numOk = /\d/.test(pwd)
+    const specialOk = /[^A-Za-z0-9]/.test(pwd)
+    return lengthOk && upperOk && lowerOk && numOk && specialOk
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
     try {
-      await new Promise((r) => setTimeout(r, 800)) // mock delay
-      setUser({ id: '1', name: 'John Doe', email, token: '123' })
+      if (mode === 'signup') {
+        if (!isStrongPassword(password)) {
+          showToast('Password must be at least 8 chars and include upper, lower, number, and special character.', 'error')
+          return
+        }
+        if (password !== passwordConfirm) {
+          showToast('Passwords do not match.', 'error')
+          return
+        }
+        await register(email, password, passwordConfirm)
+        showToast('Registration successful.', 'success')
+      } else {
+        await login(email, password)
+        showToast('Logged in successfully.', 'success')
+      }
       onOpenChange(false)
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      const msg = err?.message || 'Something went wrong'
+      showToast(msg, 'error')
     } finally {
-      setLoading(false)
     }
   }
 
@@ -78,7 +101,24 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          {mode === 'signup' && (
+            <p className="text-xs text-muted-foreground">
+              Must be 8+ chars with upper, lower, number and special.
+            </p>
+          )}
         </div>
+        {mode === 'signup' && (
+          <div className="space-y-2">
+            <Label htmlFor="passwordConfirm">Confirm password</Label>
+            <Input
+              id="passwordConfirm"
+              type="password"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              required
+            />
+          </div>
+        )}
         <Button type="submit" disabled={loading}>
           {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Sign up'}
         </Button>
