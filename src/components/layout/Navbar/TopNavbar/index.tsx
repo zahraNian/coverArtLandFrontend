@@ -44,6 +44,13 @@ const data: NavMenu = [
     url: "/about",
     children: [],
   },
+  {
+    id: 5,
+    type: "MenuItem",
+    label: "FAQ",
+    url: "/faq",
+    children: [],
+  },
 ];
 
 const TopNavbar = () => {

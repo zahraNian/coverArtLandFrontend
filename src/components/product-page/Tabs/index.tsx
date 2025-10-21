@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import ProductDetailsContent from "./ProductDetailsContent";
 import CoverCustomizeForm from "./CoverCustomizeForm";
-import FaqContent from "./FaqContent";
 
 type TabBtn = {
   id: number;
@@ -20,10 +19,6 @@ const tabBtnData: TabBtn[] = [
   {
     id: 2,
     label: "Customize",
-  },
-  {
-    id: 3,
-    label: "FAQs",
   },
 ];
 
@@ -53,7 +48,6 @@ const Tabs = () => {
       <div className="mb-12 sm:mb-16">
         {active === 1 && <ProductDetailsContent />}
         {active === 2 && <CoverCustomizeForm />}
-        {active === 3 && <FaqContent />}
       </div>
     </div>
   );

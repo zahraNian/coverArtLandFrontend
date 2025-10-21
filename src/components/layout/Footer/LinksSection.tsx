@@ -24,6 +24,11 @@ const footerLinksData: FooterLinks[] = [
         label: "Privacy Policy",
         url: "#",
       },
+      {
+        id: 25,
+        label: "FAQ",
+        url: "/faq",
+      },
     ],
   },
   {
