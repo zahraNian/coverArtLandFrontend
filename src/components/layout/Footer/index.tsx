@@ -37,14 +37,14 @@ const Footer = () => {
     <footer className="mt-10">
       <div className="relative">
         <div className="absolute bottom-0 w-full h-1/2 bg-[#F0F0F0]"></div>
-        <div className="px-4">
+        {/* <div className="px-4">
           <NewsLetterSection />
-        </div>
+        </div> */}
       </div>
       <div className="pt-8 md:pt-[50px] bg-[#F0F0F0] px-4 pb-4">
         <div className="max-w-frame mx-auto">
           <nav className="lg:grid lg:grid-cols-12 mb-8">
-            <div className="flex flex-col lg:col-span-3 lg:max-w-[248px]">
+            <div className="flex flex-col lg:col-span-3 lg:max-w-[295px]">
               <h1
                 className={cn([
                   integralCF.className,
@@ -56,7 +56,7 @@ const Footer = () => {
               <p className="text-black/60 text-sm mb-9">
                 Original album cover designs for musicians.
               </p>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 {socialsData.map((social) => (
                   <Link
                     href={social.url}
@@ -66,7 +66,7 @@ const Footer = () => {
                     {social.icon}
                   </Link>
                 ))}
-              </div>
+              </div> */}
             </div>
             <div className="grid grid-cols-2 lg:col-span-9 lg:pl-48">
               <LinksSection />
