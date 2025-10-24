@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/pagination";
 import { PaginatedApiService } from "@/lib/api";
 import ShopFiltersClient from "@/components/shop-page/ShopFiltersClient";
+import NoDataFound from "@/components/common/NoDataFound";
 import { Product } from "@/types/product.types";
 import { BaseApiService } from "@/lib/api";
 
@@ -102,38 +103,46 @@ export default async function ShopPage({ searchParams }: { searchParams?: Search
               initial={{ q, sort, genres: genres ? genres.split(",") : [], price }}
             />
 
-            <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-              {items.map((product) => (
-                <ProductCard key={product.id} data={product as Product} />
-              ))}
-            </div>
-            <hr className="border-t-black/10" />
-            <Pagination className="justify-between">
-              <PaginationPrevious
-                href={page > 1 ? buildHref("/shop", { page: page - 1, limit, q, sort, genres, price }) : undefined}
-                className="border border-black/10"
+            {items.length === 0 ? (
+              <NoDataFound
+                title="No designs found"
               />
-              <PaginationContent>
-                {Array.from({ length: totalPages }).map((_, i) => {
-                  const p = i + 1;
-                  return (
-                    <PaginationItem key={p}>
-                      <PaginationLink
-                        href={buildHref("/shop", { page: p, limit, q, sort, genres, price })}
-                        className="text-black/50 font-medium text-sm"
-                        isActive={p === page}
-                      >
-                        {p}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                })}
-              </PaginationContent>
-              <PaginationNext
-                href={page < totalPages ? buildHref("/shop", { page: page + 1, limit, q, sort, genres, price }) : undefined}
-                className="border border-black/10"
-              />
-            </Pagination>
+            ) : (
+              <>
+                <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+                  {items.map((product) => (
+                    <ProductCard key={product.id} data={product as Product} />
+                  ))}
+                </div>
+                <hr className="border-t-black/10" />
+                <Pagination className="justify-between">
+                  <PaginationPrevious
+                    href={page > 1 ? buildHref("/shop", { page: page - 1, limit, q, sort, genres, price }) : undefined}
+                    className="border border-black/10"
+                  />
+                  <PaginationContent>
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const p = i + 1;
+                      return (
+                        <PaginationItem key={p}>
+                          <PaginationLink
+                            href={buildHref("/shop", { page: p, limit, q, sort, genres, price })}
+                            className="text-black/50 font-medium text-sm"
+                            isActive={p === page}
+                          >
+                            {p}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                  </PaginationContent>
+                  <PaginationNext
+                    href={page < totalPages ? buildHref("/shop", { page: page + 1, limit, q, sort, genres, price }) : undefined}
+                    className="border border-black/10"
+                  />
+                </Pagination>
+              </>
+            )}
           </div>
         </div>
       </div>
