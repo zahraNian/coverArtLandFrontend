@@ -9,6 +9,7 @@ import SortSelect from "@/components/shop-page/controls/SortSelect";
 import GenreMultiSelect from "@/components/shop-page/controls/GenreMultiSelect";
 import PriceRangeSelect from "@/components/shop-page/controls/PriceRangeSelect";
 import ActiveFilters from "@/components/shop-page/controls/ActiveFilters";
+import { useGenresStore } from "@/store/genres";
 
 export type Option = { label: string; value: string };
 
@@ -29,13 +30,18 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const storeGenres = useGenresStore((s) => s.genres);
+  const storeLoading = useGenresStore((s) => s.loading);
+  const fetchStoreGenres = useGenresStore((s) => s.fetchGenres);
+
   const [search, setSearch] = useState<string>(initial.q || "");
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [genres, setGenres] = useState<string[]>(initial.genres || []);
   const [price, setPrice] = useState<string | undefined>(initial.price || undefined);
   const [sort, setSort] = useState<string | undefined>(initial.sort || "most-popular");
 
-  const activeGenreLabels = useMemo(() => genreOptions.filter((g) => genres.includes(g.value)), [genreOptions, genres]);
+  const mergedGenreOptions = storeGenres.length ? storeGenres : genreOptions;
+  const activeGenreLabels = useMemo(() => mergedGenreOptions.filter((g) => genres.includes(g.value)), [mergedGenreOptions, genres]);
   const activePriceLabel = useMemo(() => priceOptions.find((p) => p.value === price) || null, [priceOptions, price]);
 
   const updateUrl = useCallback(
@@ -117,11 +123,15 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
           <div className="flex flex-col gap-2">
             <span className="text-sm text-black/60">Genre</span>
             <GenreMultiSelect
-              options={genreOptions}
+              options={mergedGenreOptions}
               value={genres}
               onChange={(vals) => {
                 setGenres(vals);
                 updateUrl({ genres: vals });
+              }}
+              loading={storeLoading}
+              onOpen={() => {
+                if (!storeGenres.length && !storeLoading) fetchStoreGenres();
               }}
             />
           </div>

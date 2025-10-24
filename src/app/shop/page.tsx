@@ -11,6 +11,7 @@ import {
 import { PaginatedApiService } from "@/lib/api";
 import ShopFiltersClient from "@/components/shop-page/ShopFiltersClient";
 import { Product } from "@/types/product.types";
+import { BaseApiService } from "@/lib/api";
 
 type SearchParams = {
   page?: string;
@@ -20,6 +21,17 @@ type SearchParams = {
   genres?: string;
   price?: string;
 };
+
+async function fetchGenresOptions() {
+  const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
+  try {
+    const res = await api.get<any>("/categories", { cache: "no-store" });
+    const items = Array.isArray((res as any)?.data) ? (res as any).data : (Array.isArray(res) ? res : []);
+    return items.map((g: any) => ({ label: g.name || g.title || String(g.slug || g.id), value: String(g.slug || g.id || g.name || g.title) }));
+  } catch (e) {
+    return [] as { label: string; value: string }[];
+  }
+}
 
 async function fetchProducts(params: {
   page: number;
@@ -60,13 +72,7 @@ export default async function ShopPage({ searchParams }: { searchParams?: Search
   const { data: items, meta } = await fetchProducts({ page, limit, q, sort, genres, price });
   const totalPages = Math.max(1, Number(meta?.totalPages) || 1);
 
-  const genreOptions = [
-    { label: "Casual", value: "casual" },
-    { label: "Formal", value: "formal" },
-    { label: "Sports", value: "sports" },
-    { label: "Outdoor", value: "outdoor" },
-    { label: "Accessories", value: "accessories" },
-  ];
+  const genreOptions = await fetchGenresOptions();
   const priceOptions = [
     { label: "Under $50", value: "lt-50" },
     { label: "$50 - $100", value: "50-100" },

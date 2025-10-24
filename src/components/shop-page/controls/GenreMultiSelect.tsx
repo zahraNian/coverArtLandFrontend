@@ -9,9 +9,11 @@ export type GenreMultiSelectProps = {
   onChange: (next: string[]) => void;
   placeholder?: string;
   className?: string;
+  loading?: boolean;
+  onOpen?: () => void;
 };
 
-export default function GenreMultiSelect({ options, value, onChange, placeholder = "Select genre", className }: GenreMultiSelectProps) {
+export default function GenreMultiSelect({ options, value, onChange, placeholder = "Select genre", className, loading, onOpen }: GenreMultiSelectProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -44,7 +46,13 @@ export default function GenreMultiSelect({ options, value, onChange, placeholder
     <div className={"relative inline-block text-left " + (className ?? "")} ref={containerRef}>
       <button
         type="button"
-        onClick={() => setOpen((s) => !s)}
+        onClick={() => {
+          setOpen((s) => {
+            const next = !s;
+            if (next) onOpen?.();
+            return next;
+          });
+        }}
         className="inline-flex items-center gap-2 rounded-md border border-black/10 px-3 py-2 text-sm bg-white hover:bg-black/5"
       >
         <span className="line-clamp-1">{display}</span>
@@ -67,6 +75,9 @@ export default function GenreMultiSelect({ options, value, onChange, placeholder
           className="absolute z-30 mt-1 w-56 origin-top-left rounded-md border border-black/10 bg-white shadow-md"
         >
           <div className="max-h-64 overflow-auto py-1">
+            {loading && (
+              <div className="px-3 py-2 text-sm text-black/60">Loading...</div>
+            )}
             {options.map((opt) => {
               const checked = value.includes(opt.value);
               return (

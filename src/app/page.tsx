@@ -1,4 +1,6 @@
 import ProductListSec from "@/components/common/ProductListSec";
+import GenresHydrator from "@/components/common/GenresHydrator";
+import { BaseApiService } from "@/lib/api";
 import ProductGenreList from "@/components/common/ProductGenreList";
 import Header from "@/components/homepage/Header";
 // import Reviews from "@/components/homepage/Reviews";
@@ -6,50 +8,24 @@ import { Product } from "@/types/product.types";
 import { GenreItem } from "@/types/productGenre.types";
 import { Review } from "@/types/review.types";
 
-export const genreItems: GenreItem[] = [
-  {
-    id: 1,
-    title: "Electronic",
-    srcUrl: "/icons/zap.svg",
-    iconClass: "bg-blue-500",
-    designCount: 134
-  },
-  {
-    id: 2,
-    title: "Rock",
-    srcUrl: "/icons/volume.svg",
-    iconClass: "bg-red-500",
-    designCount: 104
-  },
-  {
-    id: 3,
-    title: "Jazz",
-    srcUrl: "/icons/music.svg",
-    iconClass: "bg-yellow-500",
-    designCount: 63
-  },
-  {
-    id: 4,
-    title: "Abstract",
-    srcUrl: "/icons/palette.svg",
-    iconClass: "bg-purple-500",
-    designCount: 93
-  },
-  {
-    id: 5,
-    title: "Vintage",
-    srcUrl: "/icons/clock.svg",
-    iconClass: "bg-orange-500",
-    designCount: 454
-  },
-  {
-    id: 6,
-    title: "Indie",
-    srcUrl: "/icons/heart.svg",
-    iconClass: "bg-pink-500",
-    designCount: 34
-  },
-];
+async function fetchGenresForHome(): Promise<{ list: GenreItem[]; options: { label: string; value: string }[] }> {
+  const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
+  try {
+    const res = await api.get<any>("/categories", { cache: "no-store" });
+    const items = Array.isArray((res as any)?.data) ? (res as any).data : (Array.isArray(res) ? res : []);
+    const list: GenreItem[] = items.map((g: any, idx: number) => ({
+      id: Number(g.id ?? idx + 1),
+      title: g.name || g.title || String(g.slug || g.id),
+      srcUrl: "/icons/music.svg",
+      iconClass: "bg-blue-500",
+      designCount: Number(g.count ?? g.designCount ?? 0),
+    }));
+    const options = items.map((g: any) => ({ label: g.name || g.title || String(g.slug || g.id), value: String(g.slug || g.id || g.name || g.title) }));
+    return { list, options };
+  } catch {
+    return { list: [], options: [] };
+  }
+}
 
 export const newArrivalsData: Product[] = [
   {
@@ -262,7 +238,9 @@ export const reviewsData: Review[] = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const { list, options } = await fetchGenresForHome();
+  const browse = list.length ? list : [];
   return (
     <>
       <Header />
@@ -271,8 +249,9 @@ export default function Home() {
         <ProductGenreList
           title="Browse by Genre"
           desc="Browse designs by genre to find the perfect style for your music."
-          data={genreItems}
+          data={browse}
         />
+        <GenresHydrator options={options} />
         </div>
         <ProductListSec
           title="Featured Designs"
