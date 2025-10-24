@@ -56,7 +56,7 @@ const Footer = () => {
               <p className="text-black/60 text-sm mb-9">
                 Original album cover designs for musicians.
               </p>
-              {/* <div className="flex items-center">
+              <div className="flex items-center">
                 {socialsData.map((social) => (
                   <Link
                     href={social.url}
@@ -66,7 +66,7 @@ const Footer = () => {
                     {social.icon}
                   </Link>
                 ))}
-              </div> */}
+              </div>
             </div>
             <div className="grid grid-cols-2 lg:col-span-9 lg:pl-48">
               <LinksSection />

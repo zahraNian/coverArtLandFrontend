@@ -142,6 +142,7 @@ export class BaseApiService {
 
                 return data as T
             } catch (err: any) {
+                console.error(err);
                 // network error or ApiError
                 const isNetwork = err instanceof TypeError || err.name === 'AbortError'
                 const status = err instanceof ApiError ? err.status : 0
@@ -248,51 +249,7 @@ export function createApiClient(opts?: { baseUrl?: string; defaultHeaders?: Reco
  * For getServerSideProps (pages dir): you can parse cookie from ctx.req.headers.cookie
  */
 
-/**
- * React hook helper for client calls (lightweight)
- * Example:
- * const { data, error, loading, refetch } = useApi('/posts')
- */
-import { useEffect, useState } from 'react'
-
-export function useApi<T = any>(path: string, opts?: { deps?: any[]; manual?: boolean; requestOptions?: RequestOptions }) {
-    const { deps = [], manual = false, requestOptions } = opts ?? {}
-    const [data, setData] = useState<T | null>(null)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState<ApiError | null>(null)
-
-    const client = createApiClient()
-
-    const fetcher = async () => {
-        setLoading(true)
-        setError(null)
-        try {
-            const res = await client.raw.get<T>(path, requestOptions)
-            setData(res)
-            return res
-        } catch (err: any) {
-            if (err instanceof ApiError) setError(err)
-            else setError(new ApiError(err?.message ?? 'Unknown', err?.status ?? 500))
-            throw err
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        if (!manual) {
-            fetcher().catch(() => { })
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, deps)
-
-    return {
-        data,
-        loading,
-        error,
-        refetch: fetcher,
-    }
-}
+// Client-only hook moved to src/lib/useApi.ts to keep this module SSR-safe.
 
 
 
