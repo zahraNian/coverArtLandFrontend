@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,6 +20,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const [accepted, setAccepted] = useState(true)
 
   const isStrongPassword = (pwd: string) => {
     // min 8 chars, uppercase, lowercase, number, special
@@ -119,7 +121,21 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             />
           </div>
         )}
-        <Button type="submit" disabled={loading}>
+        <div className="flex items-center gap-2 text-sm">
+          <input
+            id="tos"
+            type="checkbox"
+            className="h-4 w-4"
+            checked={accepted}
+            onChange={(e) => setAccepted(e.target.checked)}
+          />
+          <Label htmlFor="tos" className="text-sm font-normal">
+            I agree to{' '}
+            <Link href="/terms" target="_blank" className="underline">Terms of Service</Link>{' '}and{' '}
+            <Link href="/privacy" target="_blank" className="underline">Privacy Policy</Link>
+          </Label>
+        </div>
+        <Button type="submit" disabled={loading || !accepted}>
           {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Sign up'}
         </Button>
       </form>
