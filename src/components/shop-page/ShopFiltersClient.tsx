@@ -49,6 +49,34 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
     }
   }, [storeGenres.length, storeLoading, genreListError, fetchStoreGenres]);
 
+  // Debounce helper
+  function useDebouncedValue<T>(value: T, delay = 450) {
+    const [debounced, setDebounced] = useState(value);
+    useEffect(() => {
+      const t = setTimeout(() => setDebounced(value), delay);
+      return () => clearTimeout(t);
+    }, [value, delay]);
+    return debounced;
+  }
+
+  // Keep local input in sync with URL q when it changes due to navigation
+  useEffect(() => {
+    const urlQ = searchParams?.get("q") || "";
+    // only update local if different to avoid cursor jumps while typing
+    if (urlQ !== search) setSearch(urlQ);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const debouncedSearch = useDebouncedValue(search, 450);
+  // Push URL with debounced search (and reset page) to trigger SSR fetch
+  useEffect(() => {
+    const urlQ = searchParams?.get("q") || "";
+    if (debouncedSearch !== urlQ) {
+      updateUrl({ q: debouncedSearch });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch]);
+
   const mergedGenreOptions = storeGenres.length ? storeGenres : genreOptions;
   const activeGenreLabels = useMemo(() => mergedGenreOptions.filter((g) => genres.includes(g.value)), [mergedGenreOptions, genres]);
   const activePriceLabel = useMemo(() => priceOptions.find((p) => p.value === price) || null, [priceOptions, price]);
@@ -92,7 +120,7 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
 
   return (
     <div className="flex flex-col w-full space-y-5">
-      <div className="w-full">
+      <div className="w-full" id="search">
         <form
           onSubmit={(e) => {
             e.preventDefault();
