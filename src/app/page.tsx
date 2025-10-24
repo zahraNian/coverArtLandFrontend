@@ -1,31 +1,11 @@
 import ProductListSec from "@/components/common/ProductListSec";
-import GenresHydrator from "@/components/common/GenresHydrator";
-import { BaseApiService } from "@/lib/api";
+import GenresSection from "@/components/homepage/GenresSection";
 import ProductGenreList from "@/components/common/ProductGenreList";
 import Header from "@/components/homepage/Header";
 // import Reviews from "@/components/homepage/Reviews";
 import { Product } from "@/types/product.types";
 import { GenreItem } from "@/types/productGenre.types";
 import { Review } from "@/types/review.types";
-
-async function fetchGenresForHome(): Promise<{ list: GenreItem[]; options: { label: string; value: string }[] }> {
-  const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
-  try {
-    const res = await api.get<any>("/categories", { cache: "no-store" });
-    const items = Array.isArray((res as any)?.data) ? (res as any).data : (Array.isArray(res) ? res : []);
-    const list: GenreItem[] = items.map((g: any, idx: number) => ({
-      id: Number(g.id ?? idx + 1),
-      title: g.name || g.title || String(g.slug || g.id),
-      srcUrl: "/icons/music.svg",
-      iconClass: "bg-blue-500",
-      designCount: Number(g.count ?? g.designCount ?? 0),
-    }));
-    const options = items.map((g: any) => ({ label: g.name || g.title || String(g.slug || g.id), value: String(g.slug || g.id || g.name || g.title) }));
-    return { list, options };
-  } catch {
-    return { list: [], options: [] };
-  }
-}
 
 export const newArrivalsData: Product[] = [
   {
@@ -239,20 +219,11 @@ export const reviewsData: Review[] = [
 ];
 
 export default async function Home() {
-  const { list, options } = await fetchGenresForHome();
-  const browse = list.length ? list : [];
   return (
     <>
       <Header />
       <main className="my-[50px] sm:my-[72px]">
-        <div className="mb-[50px] sm:mb-20">
-        <ProductGenreList
-          title="Browse by Genre"
-          desc="Browse designs by genre to find the perfect style for your music."
-          data={browse}
-        />
-        <GenresHydrator options={options} />
-        </div>
+        <GenresSection title="Browse by Genre" desc="Browse designs by genre to find the perfect style for your music." />
         <ProductListSec
           title="Featured Designs"
           desc="Original album cover designs crafted to capture the essence of your music."

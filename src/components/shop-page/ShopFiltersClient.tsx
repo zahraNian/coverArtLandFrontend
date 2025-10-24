@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import GenreMultiSelect from "@/components/shop-page/controls/GenreMultiSelect";
 import PriceRangeSelect from "@/components/shop-page/controls/PriceRangeSelect";
 import ActiveFilters from "@/components/shop-page/controls/ActiveFilters";
 import { useGenresStore } from "@/store/genres";
+import RetryError from "@/components/common/RetryError";
 
 export type Option = { label: string; value: string };
 
@@ -32,6 +33,7 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
 
   const storeGenres = useGenresStore((s) => s.genres);
   const storeLoading = useGenresStore((s) => s.loading);
+  const genreListError = useGenresStore((s) => s.error);
   const fetchStoreGenres = useGenresStore((s) => s.fetchGenres);
 
   const [search, setSearch] = useState<string>(initial.q || "");
@@ -39,6 +41,13 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
   const [genres, setGenres] = useState<string[]>(initial.genres || []);
   const [price, setPrice] = useState<string | undefined>(initial.price || undefined);
   const [sort, setSort] = useState<string | undefined>(initial.sort || "most-popular");
+
+  // Prefetch genres on mount if empty so filters are ready without SSR
+  useEffect(() => {
+    if (!storeGenres.length && !storeLoading && !genreListError) {
+      fetchStoreGenres();
+    }
+  }, [storeGenres.length, storeLoading, genreListError, fetchStoreGenres]);
 
   const mergedGenreOptions = storeGenres.length ? storeGenres : genreOptions;
   const activeGenreLabels = useMemo(() => mergedGenreOptions.filter((g) => genres.includes(g.value)), [mergedGenreOptions, genres]);
@@ -134,6 +143,14 @@ export default function ShopFiltersClient({ genreOptions, priceOptions, sortOpti
                 if (!storeGenres.length && !storeLoading) fetchStoreGenres();
               }}
             />
+            {genreListError && (
+              <RetryError
+                message={genreListError}
+                onRetry={() => {
+                  if (!storeLoading) fetchStoreGenres();
+                }}
+              />
+            )}
           </div>
           <div className="flex flex-col gap-2">
             <span className="text-sm text-black/60">Price Range</span>

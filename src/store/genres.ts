@@ -19,6 +19,8 @@ export const useGenresStore = create<GenresState>((set, get) => ({
   error: null,
   setGenres: (g) => set({ genres: g }),
   fetchGenres: async () => {
+    console.log("fetching genres");
+    
     if (get().loading) return
     set({ loading: true, error: null })
     const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE })
@@ -32,6 +34,8 @@ export const useGenresStore = create<GenresState>((set, get) => ({
       }))
       set({ genres: options, loading: false })
     } catch (e: any) {
+        console.log(e);
+        
       set({ loading: false, error: e?.message || "Failed to load genres" })
     }
   },
