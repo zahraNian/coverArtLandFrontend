@@ -1,7 +1,5 @@
 import {
-  newArrivalsData,
   relatedProductData,
-  topSellingData,
 } from "@/app/page";
 import ProductListSec from "@/components/common/ProductListSec";
 import BreadcrumbProduct from "@/components/product-page/BreadcrumbProduct";
@@ -9,21 +7,45 @@ import Header from "@/components/product-page/Header";
 import Tabs from "@/components/product-page/Tabs";
 import { Product } from "@/types/product.types";
 import { notFound } from "next/navigation";
+import { BaseApiService } from "@/lib/api";
 
-const data: Product[] = [
-  ...newArrivalsData,
-  ...topSellingData,
-  ...relatedProductData,
-];
+const fakeProduct = {
+  id: 12345,
+  title: "کاور فیک - نمونه",
+  description: "توضیحات تستی برای محصول فیک",
+  price: 99900,
+  images: [
+    { url: "/images/fake-1.jpg", alt: "عکس تست" }
+  ],
+  rating: 10,
+  discount: {
+    percentage: 2
+  }
+};
 
-export default function ProductPage({
+async function fetchProduct(id: number) {
+  const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
+  try {
+    const product = await api.get<Product>(`/products/${id}`, { cache: "no-store" });
+    //ToDo remove fakeProduct
+    return product || fakeProduct;
+  } catch (e) {
+    //ToDo replace fakeProduct with e
+    return fakeProduct;
+  }
+}
+
+export default async function ProductPage({
   params,
 }: {
   params: { slug: string[] };
 }) {
-  const productData = data.find(
-    (product) => product.id === Number(params.slug[0])
-  );
+  const id = Number(params.slug?.[0]);
+  if (!id || Number.isNaN(id)) {
+    notFound();
+  }
+
+  const productData = await fetchProduct(id);
 
   if (!productData?.title) {
     notFound();
