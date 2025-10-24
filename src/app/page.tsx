@@ -1,5 +1,6 @@
 import ProductListSec from "@/components/common/ProductListSec";
 import GenresSection from "@/components/homepage/GenresSection";
+import ProductsSection from "@/components/homepage/ProductsSection";
 import ProductGenreList from "@/components/common/ProductGenreList";
 import Header from "@/components/homepage/Header";
 // import Reviews from "@/components/homepage/Reviews";
@@ -224,21 +225,21 @@ export default async function Home() {
       <Header />
       <main className="my-[50px] sm:my-[72px]">
         <GenresSection title="Browse by Genre" desc="Browse designs by genre to find the perfect style for your music." />
-        <ProductListSec
+        <ProductsSection
           title="Featured Designs"
           desc="Original album cover designs crafted to capture the essence of your music."
-          data={newArrivalsData}
+          endpoint="/products"
+          limit={9}
         />
         <div className="max-w-frame mx-auto px-4 xl:px-0">
           <hr className="h-[1px] border-t-black/10 my-10 sm:my-16" />
         </div>
-        <div className="mb-[50px] sm:mb-20">
-          <ProductListSec
-            title="All Designs"
-            desc="Original album cover designs crafted to capture the essence of your music."
-            data={topSellingData}
-          />
-        </div>
+        <ProductsSection
+          title="All Designs"
+          desc="Original album cover designs crafted to capture the essence of your music."
+          endpoint="/products"
+          limit={12}
+        />
         {/* <Reviews data={reviewsData} /> */}
       </main>
     </>
