@@ -5,6 +5,7 @@ import RetryError from "@/components/common/RetryError";
 import NoDataFound from "@/components/common/NoDataFound";
 import { createApiClient } from "@/lib/api";
 import { useTicketsStore } from "@/store/tickets";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 type TicketStatus = "open" | "pending" | "resolved" | "closed" | string;
 
@@ -253,8 +254,15 @@ export default function Tickets() {
                                 onClick={() => setActiveId(activeId === t.id ? null : t.id)}
                             >
                                 <div className="flex items-center justify-between gap-2">
-                                    <div className="font-medium text-sm truncate">{t.subject}</div>
-                                    {hasUnread && <span className="ml-2 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[11px] leading-none rounded-full bg-red-600 text-white px-1">New</span>}
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <div className="font-medium text-sm truncate">{t.subject}</div>
+                                        {hasUnread && <span className="ml-2 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[11px] leading-none rounded-full bg-red-600 text-white px-1">New</span>}
+                                    </div>
+                                    {activeId === t.id ? (
+                                        <ChevronUpIcon className="h-4 w-4 flex-shrink-0 text-black/60" />
+                                    ) : (
+                                        <ChevronDownIcon className="h-4 w-4 flex-shrink-0 text-black/60" />
+                                    )}
                                 </div>
                                 <div className="text-[11px] text-black/60">{updated}</div>
                             </button>
