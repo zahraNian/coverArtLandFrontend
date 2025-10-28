@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import RetryError from "@/components/common/RetryError";
 import { createApiClient } from "@/lib/api";
+import { PersonIcon } from "@radix-ui/react-icons";
 
 export default function MyAccount({ user: initialUser }: { user: any }) {
   const [user, setUser] = useState<any>(initialUser || null);
@@ -18,13 +19,13 @@ export default function MyAccount({ user: initialUser }: { user: any }) {
     try {
       const api = createApiClient({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
       // Adjust endpoint to your API: e.g., "/users/me" or "/auth/me"
-      const me = await api.withAuth.get<any>("/profile", { cache: "no-store" });
+      const { data: me } = await api.withAuth.get<any>("/profile", { cache: "no-store" });
       setUser(me);
       if (typeof window !== "undefined") {
         try {
           sessionStorage.setItem("profile_cache", JSON.stringify(me));
           (window as any).__profile_fetched = true;
-        } catch {}
+        } catch { }
       }
     } catch (e: any) {
       setError(e?.message || "Failed to load profile");
@@ -57,7 +58,7 @@ export default function MyAccount({ user: initialUser }: { user: any }) {
           setLoading(false);
           return;
         }
-      } catch {}
+      } catch { }
     }
     // If a fetch is already in flight (StrictMode remount), don't start another
     if ((window as any)?.__profile_fetching) return;
@@ -90,13 +91,29 @@ export default function MyAccount({ user: initialUser }: { user: any }) {
   const formattedDate = joinDate;
 
   return (
-    <div className="p-4 border rounded-xl bg-white shadow-sm flex items-center gap-4">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700 font-semibold text-lg">
-        {user.name?.[0]?.toUpperCase() ?? "?"}
+    <div className="p-4 border rounded-xl bg-white shadow-sm">
+      <div className="flex items-center gap-4">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+          <PersonIcon className="h-6 w-6" />
+        </div>
+        <div className="min-w-0">
+          <div className="text-base sm:text-lg font-semibold text-gray-900 truncate">{user.displayName || "User"}</div>
+          <div className="text-sm text-gray-600 truncate">{user.email}</div>
+        </div>
       </div>
-      <div>
-        <div className="text-base font-semibold text-gray-800">{user.name}</div>
-        <div className="text-sm text-gray-500">Join Date: {formattedDate}</div>
+      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="rounded-lg border px-3 py-2 bg-gray-50">
+          <div className="text-[11px] uppercase tracking-wide text-gray-500">Status</div>
+          <div className="text-sm text-gray-800">Active</div>
+        </div>
+        <div className="rounded-lg border px-3 py-2 bg-gray-50">
+          <div className="text-[11px] uppercase tracking-wide text-gray-500">Member since</div>
+          <div className="text-sm text-gray-800">{formattedDate || "—"}</div>
+        </div>
+        <div className="rounded-lg border px-3 py-2 bg-gray-50">
+          <div className="text-[11px] uppercase tracking-wide text-gray-500">Email</div>
+          <div className="text-sm text-gray-800 truncate">{user.email}</div>
+        </div>
       </div>
     </div>
   );
