@@ -5,6 +5,8 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
 } from "@/components/ui/carousel";
 import GenreCard from "./GenreCard";
 import { GenreItem } from "@/types/productGenre.types";
@@ -64,6 +66,28 @@ const ProductListSec = ({ title, data, viewAllLink, desc }: ProductListSecProps)
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselPrevious
+            className="hidden md:flex disabled:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 h-9 w-9 rounded-full border bg-white shadow disabled:pointer-events-none"
+            aria-label="Previous genres"
+            type="button"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+            }}
+          />
+          <CarouselNext
+            className="hidden md:flex disabled:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 h-9 w-9 rounded-full border bg-white shadow disabled:pointer-events-none"
+            aria-label="Next genres"
+            type="button"
+            onPointerDown={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+            }}
+          />
         </Carousel>
         {viewAllLink && (
           <div className="w-full px-4 sm:px-0 text-center">

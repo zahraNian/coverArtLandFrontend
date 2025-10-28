@@ -12,8 +12,8 @@ export default function GenresSection({ title, desc }: { title: string; desc: st
   const error = useGenresStore((s) => s.error);
   const fetchGenres = useGenresStore((s) => s.fetchGenres);
   const colorsClass = ["bg-blue-500", "bg-yellow-500", "bg-green-500", "bg-orange-500", "bg-purple-500", "bg-red-500"]
-  const iconUrls = ["/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg", "/icons/volume.svg", "/icons/clock.svg", "/icons/heart.svg"]
-  const designsCoutn = [100, 70, 120, 90, 50, 140]
+  const iconUrls = ["/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg", "/icons/volume.svg", "/icons/clock.svg", "/icons/heart.svg", "/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg", "/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg", "/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg"]
+  const designsCoutn = [100, 70, 120, 90, 50, 140, 80, 50, 120, 60, 70, 110, 130, 90, 60, 120, 80, 50, 140, 100]
   useEffect(() => {
     // Auto-fetch once if empty and not loading and no known error
     if (!genres.length && !loading && !error) fetchGenres();
@@ -21,14 +21,19 @@ export default function GenresSection({ title, desc }: { title: string; desc: st
 
   const list: GenreItem[] = useMemo(
     () =>
-      genres.map((g, idx) => ({
-        id: idx + 1,
-        title: g.label,
-        slug: g.value,
-        srcUrl: iconUrls[idx],
-        iconClass: colorsClass[idx],
-        designCount: designsCoutn[idx],
-      })),
+      genres.map((g, idx) => {
+        const i = idx % iconUrls.length;
+        const c = idx % colorsClass.length;
+        const d = idx % designsCoutn.length;
+        return {
+          id: idx + 1,
+          title: g.label,
+          slug: g.value,
+          srcUrl: iconUrls[i] || "/icons/music.svg",
+          iconClass: colorsClass[c] || "bg-blue-500",
+          designCount: designsCoutn[d] || 50,
+        } as GenreItem;
+      }),
     [genres]
   );
 
