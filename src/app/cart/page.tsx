@@ -9,15 +9,54 @@ import { integralCF } from "@/styles/fonts";
 import { FaArrowRight } from "react-icons/fa6";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { TbBasketExclamation } from "react-icons/tb";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { RootState } from "@/lib/store";
 import { useAppSelector } from "@/lib/hooks/redux";
 import Link from "next/link";
+import { createApiClient } from "@/lib/api";
+import { showToast } from "@/lib/toast";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const router = useRouter();
   const { cart, totalPrice, adjustedTotalPrice } = useAppSelector(
     (state: RootState) => state.carts
   );
+  const [placing, setPlacing] = useState(false);
+
+  const handleCheckout = useCallback(async () => {
+    if (!cart || cart.items.length === 0) return;
+    try {
+      setPlacing(true);
+      const api = createApiClient({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
+      const payload = {
+        items: cart.items.map((it) => ({
+          id: it.id,
+          name: it.name,
+          price: it.price,
+          quantity: it.quantity,
+          attributes: it.attributes,
+          discount: it.discount,
+        })),
+        subtotal: totalPrice,
+        total: Math.round(adjustedTotalPrice),
+      };
+      // Try a common checkout endpoint; adjust if your API differs
+      const res = await api.withAuth.post<any>("/checkout", payload, { cache: "no-store" });
+      const paymentUrl = (res as any)?.data?.payment_url || (res as any)?.payment_url || (res as any)?.paymentUrl;
+      if (paymentUrl && typeof window !== "undefined") {
+        window.location.href = paymentUrl as string;
+        return;
+      }
+      showToast("Order placed successfully.", "success");
+      router.push("/profile?tab=orders");
+    } catch (e: any) {
+      const msg = e?.message || "Failed to start checkout";
+      showToast(msg, "error");
+    } finally {
+      setPlacing(false);
+    }
+  }, [cart, totalPrice, adjustedTotalPrice, router]);
 
   return (
     <main className="pb-20">
@@ -100,9 +139,11 @@ export default function CartPage() {
                 </div>
                 <Button
                   type="button"
-                  className="text-sm md:text-base font-medium bg-black rounded-full w-full py-4 h-[54px] md:h-[60px] group"
+                  onClick={handleCheckout}
+                  disabled={placing || !cart || cart.items.length === 0}
+                  className="text-sm md:text-base font-medium bg-black rounded-full w-full py-4 h-[54px] md:h-[60px] group disabled:opacity-60"
                 >
-                  Go to Checkout{" "}
+                  {placing ? "Processing…" : "Go to Checkout"}
                   <FaArrowRight className="text-xl ml-2 group-hover:translate-x-1 transition-all" />
                 </Button>
               </div>
