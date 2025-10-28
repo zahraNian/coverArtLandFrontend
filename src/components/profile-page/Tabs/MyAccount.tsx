@@ -4,11 +4,16 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import RetryError from "@/components/common/RetryError";
 import { createApiClient } from "@/lib/api";
 import { PersonIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/auth";
+import { useRouter } from "next/navigation";
 
 export default function MyAccount({ user: initialUser }: { user: any }) {
   const [user, setUser] = useState<any>(initialUser || null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const logout = useAuthStore((s) => s.logout);
+  const router = useRouter();
 
   const fetchProfile = useCallback(async () => {
     if (typeof window !== "undefined") {
@@ -92,14 +97,48 @@ export default function MyAccount({ user: initialUser }: { user: any }) {
 
   return (
     <div className="p-4 border rounded-xl bg-white shadow-sm">
-      <div className="flex items-center gap-4">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-700">
-          <PersonIcon className="h-6 w-6" />
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+            <PersonIcon className="h-6 w-6" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-base sm:text-lg font-semibold text-gray-900 truncate">{user.displayName || "User"}</div>
+            <div className="text-sm text-gray-600 truncate">{user.email}</div>
+          </div>
         </div>
-        <div className="min-w-0">
-          <div className="text-base sm:text-lg font-semibold text-gray-900 truncate">{user.displayName || "User"}</div>
-          <div className="text-sm text-gray-600 truncate">{user.email}</div>
-        </div>
+        <Button
+          variant="ghost"
+          className="text-red-600"
+          onClick={() => {
+            try { logout(); } catch {}
+            try {
+              sessionStorage.removeItem("orders_cache");
+              sessionStorage.removeItem("tickets_cache");
+              sessionStorage.removeItem("profile_cache");
+            } catch {}
+            try {
+              localStorage.removeItem("orders_cache");
+              localStorage.removeItem("tickets_cache");
+              localStorage.removeItem("profile_cache");
+            } catch {}
+            try {
+              const cookies = document.cookie.split("; ");
+              for (const c of cookies) {
+                const eqPos = c.indexOf("=");
+                const name = eqPos > -1 ? c.substring(0, eqPos) : c;
+                document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+              }
+            } catch {}
+            // Navigate to home first, then refresh to ensure a clean state
+            try { router.push("/"); } catch {}
+            setTimeout(() => {
+              window.location.reload();
+            }, 50);
+          }}
+        >
+          Logout
+        </Button>
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div className="rounded-lg border px-3 py-2 bg-gray-50">

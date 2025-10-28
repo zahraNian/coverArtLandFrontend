@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useAuthStore } from '@/store/auth'
@@ -8,9 +8,15 @@ import { AuthModal } from '@/components/auth/auth-modal'
 import { useTicketsStore } from '@/store/tickets'
 
 export function AuthButton() {
-    const { user } = useAuthStore()
+    const user = useAuthStore((s) => s.user)
+    const initFromStorage = useAuthStore((s) => s.initFromStorage)
     const [open, setOpen] = useState(false)
     const unread = useTicketsStore((s) => s.unreadCount)
+
+    // Ensure user state is restored after page refresh
+    useEffect(() => {
+        initFromStorage()
+    }, [initFromStorage])
 
     if (user) {
         return (
