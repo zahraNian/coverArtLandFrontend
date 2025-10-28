@@ -214,6 +214,7 @@ export function createApiClient(opts?: { baseUrl?: string; defaultHeaders?: Reco
 
     // wrap with getToken that reads localStorage
     const withAuth = {
+        withAuth: true as const,
         getToken: () => {
             if (typeof window === 'undefined') return null
             try {

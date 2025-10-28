@@ -52,7 +52,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     login: async (email, password) => {
         set({ loading: true })
         try {
-            const { data } = await api.raw.post<{ data: { user: User, access_token: string }>("/auth/login", {
+            const { data } = await api.raw.post<{ data: { user: User, access_token: string }}>("/auth/login", {
                 email,
                 password,
             })

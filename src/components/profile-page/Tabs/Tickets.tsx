@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import RetryError from "@/components/common/RetryError";
 import NoDataFound from "@/components/common/NoDataFound";
 import { createApiClient } from "@/lib/api";
@@ -33,6 +33,7 @@ export default function Tickets() {
     const active = useMemo(() => tickets.find((t) => t.id === activeId) || null, [tickets, activeId]);
 
     const fetchTickets = useCallback(async () => {
+        if (typeof window !== "undefined") (window as any).__tickets_fetching = true;
         setLoading(true);
         setError(null);
         try {
@@ -47,6 +48,12 @@ export default function Tickets() {
             const unread = data.reduce((acc, t) => acc + (t.messages || []).filter((m) => m.by === "support" && !m.read).length, 0);
             setUnreadCount(unread);
             if (data.length) setActiveId(data[0].id);
+            if (typeof window !== "undefined") {
+                try {
+                    sessionStorage.setItem("tickets_cache", JSON.stringify(data));
+                    (window as any).__tickets_fetched = true;
+                } catch {}
+            }
         } catch (e: any) {
               setError(e?.message || "Failed to load tickets");
         } finally {
@@ -127,12 +134,34 @@ export default function Tickets() {
             });
             setActiveId((prevId) => prevId ?? "TK-1001");
             setLoading(false);
+            if (typeof window !== "undefined") (window as any).__tickets_fetching = false;
         }
     }, []);
 
+    const didFetch = useRef(false);
     useEffect(() => {
+        if (didFetch.current) return;
+        didFetch.current = true;
+        // If we already have data, don't fetch
+        if (tickets.length > 0) return;
+        // Try cache first
+        if (typeof window !== "undefined") {
+            try {
+                const cached = sessionStorage.getItem("tickets_cache");
+                if (cached) {
+                    const data = JSON.parse(cached) as TicketDTO[];
+                    setTickets(data);
+                    const unread = data.reduce((acc, t) => acc + (t.messages || []).filter((m) => m.by === "support" && !m.read).length, 0);
+                    setUnreadCount(unread);
+                    if (data.length) setActiveId(data[0].id);
+                    setLoading(false);
+                    return;
+                }
+            } catch {}
+            if ((window as any).__tickets_fetching) return;
+        }
         fetchTickets();
-    }, [fetchTickets]);
+    }, [fetchTickets, tickets.length]);
 
     useEffect(() => {
         if (!active) return;

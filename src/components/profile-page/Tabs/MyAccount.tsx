@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import RetryError from "@/components/common/RetryError";
 import { createApiClient } from "@/lib/api";
 
@@ -10,21 +10,57 @@ export default function MyAccount({ user: initialUser }: { user: any }) {
   const [error, setError] = useState<string | null>(null);
 
   const fetchProfile = useCallback(async () => {
+    if (typeof window !== "undefined") {
+      (window as any).__profile_fetching = true;
+    }
     setLoading(true);
     setError(null);
     try {
       const api = createApiClient({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
       // Adjust endpoint to your API: e.g., "/users/me" or "/auth/me"
-      const me = await api.withAuth.get<any>("/users/me", { cache: "no-store" });
+      const me = await api.withAuth.get<any>("/profile", { cache: "no-store" });
       setUser(me);
+      if (typeof window !== "undefined") {
+        try {
+          sessionStorage.setItem("profile_cache", JSON.stringify(me));
+          (window as any).__profile_fetched = true;
+        } catch {}
+      }
     } catch (e: any) {
       setError(e?.message || "Failed to load profile");
     } finally {
       setLoading(false);
+      if (typeof window !== "undefined") {
+        (window as any).__profile_fetching = false;
+      }
     }
   }, []);
 
+  const didFetch = useRef(false);
   useEffect(() => {
+    if (didFetch.current) return;
+    didFetch.current = true;
+    // Try cache first
+    if (!user && typeof window !== "undefined") {
+      try {
+        if ((window as any).__profile_fetched) {
+          const cached = sessionStorage.getItem("profile_cache");
+          if (cached) {
+            setUser(JSON.parse(cached));
+            setLoading(false);
+            return;
+          }
+        }
+        const cached = sessionStorage.getItem("profile_cache");
+        if (cached) {
+          setUser(JSON.parse(cached));
+          setLoading(false);
+          return;
+        }
+      } catch {}
+    }
+    // If a fetch is already in flight (StrictMode remount), don't start another
+    if ((window as any)?.__profile_fetching) return;
     if (!user) fetchProfile();
   }, [user, fetchProfile]);
 
