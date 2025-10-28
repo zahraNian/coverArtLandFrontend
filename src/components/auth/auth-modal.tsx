@@ -45,11 +45,15 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
           return
         }
         await register(email, password, passwordConfirm)
-        showToast('Registration successful.', 'success')
+        // Switch to login mode after successful registration and keep email/password prefilled
+        setMode('login')
+        showToast('Registration successful. Please sign in.', 'success')
+        return
       } else {
         await login(email, password)
         showToast('Logged in successfully.', 'success')
       }
+      // Close the modal only after a successful login
       onOpenChange(false)
     } catch (err: any) {
       const msg = err?.message || 'Something went wrong'

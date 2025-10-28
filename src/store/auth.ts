@@ -7,7 +7,7 @@ interface User {
     id: string
     name: string
     email: string
-    token: string
+    access_token: string
 }
 
 interface AuthState {
@@ -52,15 +52,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     login: async (email, password) => {
         set({ loading: true })
         try {
-            const data = await api.raw.post<{ user: User }>("/auth/login", {
+            const { data } = await api.raw.post<{ data: { user: User, access_token: string }>("/auth/login", {
                 email,
                 password,
             })
-
-            const user = data.user
-            localStorage.setItem("token", user.token)
-            localStorage.setItem("user", JSON.stringify(user))
-            set({ user, loading: false })
+            localStorage.setItem("token", data.access_token)
+            localStorage.setItem("user", JSON.stringify(data.user))
+            set({ user: data.user, loading: false })
         } catch (err) {
             console.error("Login error:", err)
             set({ loading: false })
@@ -75,16 +73,12 @@ export const useAuthStore = create<AuthState>((set) => ({
     register: async (email, password, password_confirm) => {
         set({ loading: true })
         try {
-            const data = await api.raw.post<{ user: User }>("/auth/register", {
+            await api.raw.post<{ user: User }>("/auth/register", {
                 email,
                 password,
                 password_confirm,
             })
-
-            const user = data.user
-            localStorage.setItem("token", user.token)
-            localStorage.setItem("user", JSON.stringify(user))
-            set({ user, loading: false })
+            set({ loading: false })
         } catch (err) {
             console.error("Register error:", err)
             set({ loading: false })
