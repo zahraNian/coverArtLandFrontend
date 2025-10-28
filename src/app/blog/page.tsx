@@ -105,7 +105,7 @@ export default async function BlogPLPPage({ searchParams }: { searchParams?: { p
                 {p === "..." ? (
                   <span className="px-3 py-2 text-sm">...</span>
                 ) : (
-                  <PaginationLink isActive={p === pagination.page}>
+                  <PaginationLink asChild isActive={p === pagination.page}>
                     <Link href={`/blog?page=${p}&pageSize=${pagination.pageSize}`}>{p}</Link>
                   </PaginationLink>
                 )}
