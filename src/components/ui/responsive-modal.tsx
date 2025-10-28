@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog'
 import {
     Drawer,
     DrawerContent,
@@ -59,7 +59,7 @@ export function ResponsiveModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
+            {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
             <DialogContent>
                 <DialogHeader>
                     {title && <DialogTitle>{title}</DialogTitle>}

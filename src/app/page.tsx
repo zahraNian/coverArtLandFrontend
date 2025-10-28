@@ -223,7 +223,7 @@ export default async function Home() {
   return (
     <>
       <Header />
-      <main className="my-[50px] sm:my-[72px]">
+      <main className="my-[50px] sm:my-[72px] px-3 lg:px-0">
         <GenresSection title="Browse by Genre" desc="Browse designs by genre to find the perfect style for your music." />
         <ProductsSection
           title="Featured Designs"

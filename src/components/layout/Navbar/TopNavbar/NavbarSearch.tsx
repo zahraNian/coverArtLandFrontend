@@ -75,7 +75,7 @@ export default function NavbarSearch() {
       </InputGroup>
 
       {/* Mobile search icon also hides on /shop by returning null above */}
-      <Link href="/shop#search" className="block md:hidden mr-[14px] p-1">
+      <Link href="/shop#search" className="lg:hidden block md:hidden mr-[14px] p-1">
         <Image
           priority
           src="/icons/search-black.svg"

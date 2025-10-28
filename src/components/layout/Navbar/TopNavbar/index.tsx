@@ -57,7 +57,7 @@ const TopNavbar = () => {
   return (
     <nav className="sticky top-0 bg-white z-20">
       <div className="flex relative max-w-frame mx-auto items-center justify-between py-5 md:py-6 px-4 xl:px-0">
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           <div className="block md:hidden mr-4">
             <ResTopNavbar data={data} />
           </div>
@@ -65,28 +65,30 @@ const TopNavbar = () => {
             href="/"
             className={cn([
               integralCF.className,
-              "text-2xl lg:text-[32px] mb-2 mr-3 lg:mr-10",
+              "text-2xl lg:text-[32px] leading-none mr-3 lg:mr-10",
             ])}
           >
             CoverArtLand
           </Link>
         </div>
-        <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
-          <NavigationMenuList>
-            {data.map((item) => (
-              <React.Fragment key={item.id}>
-                {item.type === "MenuItem" && (
-                  <MenuItem label={item.label} url={item.url} />
-                )}
-                {item.type === "MenuList" && (
-                  <MenuList data={item.children} label={item.label} />
-                )}
-              </React.Fragment>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-        <NavbarSearch />
-        <div className="flex items-center">
+        <div className="flex items-center flex-1 min-w-0 justify-center md:justify-start overflow-hidden">
+          <NavigationMenu className="hidden md:flex mr-2 lg:mr-7">
+            <NavigationMenuList>
+              {data.map((item) => (
+                <React.Fragment key={item.id}>
+                  {item.type === "MenuItem" && (
+                    <MenuItem label={item.label} url={item.url} />
+                  )}
+                  {item.type === "MenuList" && (
+                    <MenuList data={item.children} label={item.label} />
+                  )}
+                </React.Fragment>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+          {/* <NavbarSearch /> */}
+        </div>
+        <div className="flex items-center flex-shrink-0">
           <CartBtn />
           <AuthButton />
         </div>
