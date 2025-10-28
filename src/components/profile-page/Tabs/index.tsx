@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyAccount from "./MyAccount";
 import Orders from "./Orders";
+import Tickets from "./Tickets";
+import { useTicketsStore } from "@/store/tickets";
 
 type TabBtn = {
   id: number;
@@ -20,10 +22,22 @@ const tabBtnData: TabBtn[] = [
     id: 2,
     label: "Orders",
   },
+  {
+    id: 3,
+    label: "Tickets",
+  },
 ];
 
 const Tabs = ({ user }: { user: any }) => {
   const [active, setActive] = useState<number>(1);
+  const unread = useTicketsStore((s) => s.unreadCount);
+  const markAllRead = useTicketsStore((s) => s.markAllRead);
+
+  useEffect(() => {
+    if (active === 3) {
+      markAllRead();
+    }
+  }, [active, markAllRead]);
 
   return (
     <div>
@@ -41,13 +55,21 @@ const Tabs = ({ user }: { user: any }) => {
             ])}
             onClick={() => setActive(tab.id)}
           >
-            {tab.label}
+            <span className="relative inline-flex items-center">
+              {tab.label}
+              {tab.id === 3 && unread > 0 && (
+                <span className="ml-2 inline-flex items-center justify-center min-w-[18px] h-[18px] text-[11px] leading-none rounded-full bg-red-600 text-white px-1">
+                  {unread}
+                </span>
+              )}
+            </span>
           </Button>
         ))}
       </div>
       <div className="mb-12 sm:mb-16">
         {active === 1 && <MyAccount user={user} />}
         {active === 2 && <Orders />}
+        {active === 3 && <Tickets />}
       </div>
     </div>
   );
