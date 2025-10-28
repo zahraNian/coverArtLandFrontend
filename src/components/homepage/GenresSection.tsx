@@ -11,7 +11,9 @@ export default function GenresSection({ title, desc }: { title: string; desc: st
   const loading = useGenresStore((s) => s.loading);
   const error = useGenresStore((s) => s.error);
   const fetchGenres = useGenresStore((s) => s.fetchGenres);
-
+  const colorsClass = ["bg-blue-500", "bg-yellow-500", "bg-green-500", "bg-orange-500", "bg-purple-500", "bg-red-500"]
+  const iconUrls = ["/icons/music.svg", "/icons/palette.svg", "/icons/zap.svg", "/icons/volume.svg", "/icons/clock.svg", "/icons/heart.svg"]
+  const designsCoutn = [100, 70, 120, 90, 50, 140]
   useEffect(() => {
     // Auto-fetch once if empty and not loading and no known error
     if (!genres.length && !loading && !error) fetchGenres();
@@ -22,9 +24,10 @@ export default function GenresSection({ title, desc }: { title: string; desc: st
       genres.map((g, idx) => ({
         id: idx + 1,
         title: g.label,
-        srcUrl: "/icons/music.svg",
-        iconClass: "bg-blue-500",
-        designCount: 0,
+        slug: g.value,
+        srcUrl: iconUrls[idx],
+        iconClass: colorsClass[idx],
+        designCount: designsCoutn[idx],
       })),
     [genres]
   );
