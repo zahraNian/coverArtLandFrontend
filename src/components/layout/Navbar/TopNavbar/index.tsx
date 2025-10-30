@@ -27,7 +27,7 @@ const data: NavMenu = [
     id: 2,
     type: "MenuItem",
     label: "Browse All",
-    url: "/shop",
+    url: "/products",
     children: [],
   },
     {

@@ -22,7 +22,7 @@ const tabBtnData: TabBtn[] = [
   },
 ];
 
-const Tabs = () => {
+const Tabs = ({ product }: { product: any }) => {
   const [active, setActive] = useState<number>(1);
 
   return (
@@ -46,7 +46,7 @@ const Tabs = () => {
         ))}
       </div>
       <div className="mb-12 sm:mb-16">
-        {active === 1 && <ProductDetailsContent />}
+        {active === 1 && <ProductDetailsContent product={product} />}
         {active === 2 && <CoverCustomizeForm />}
       </div>
     </div>

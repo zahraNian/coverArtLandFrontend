@@ -13,6 +13,7 @@ import ShopFiltersClient from "@/components/shop-page/ShopFiltersClient";
 import NoDataFound from "@/components/common/NoDataFound";
 import { Product } from "@/types/product.types";
 import { BaseApiService } from "@/lib/api";
+import { assetUrl } from "@/config/images";
 
 type SearchParams = {
   page?: string;
@@ -21,6 +22,27 @@ type SearchParams = {
   sort?: string;
   genres?: string;
   price?: string;
+};
+
+const mapApiProductToProduct = (p: any): Product => {
+  const assets = Array.isArray(p?.assets) ? p.assets : [];
+  const primary = assets.find((a: any) => a?.isPrimary) || assets[0];
+  const gallery = assets.map((a: any) => assetUrl(a?.storageKey)).filter(Boolean);
+  const base = parseFloat(p?.basePrice ?? 0);
+  const current = parseFloat(((p?.currentPrice ?? base) || 0) as any);
+  const percentage = base > 0 && current < base ? Math.round(((base - current) / base) * 100) : 0;
+  const amount = base > 0 && current < base ? Math.max(0, Math.round(base - current)) : 0;
+  const tags = Array.isArray(p?.categories) ? p.categories.map((c: any) => c?.name || c?.slug).filter(Boolean) : [];
+  return {
+    id: p?.id ?? p?._id ?? p?.slug ?? "",
+    title: p?.title ?? p?.name ?? "",
+    srcUrl: assetUrl(primary?.storageKey) || "/images/pic1.png",
+    gallery,
+    price: Number.isFinite(current) ? current : 0,
+    discount: { amount, percentage },
+    rating: Number.isFinite(p?.rating) ? Number(p.rating) : 0,
+    tags,
+  } as Product;
 };
 
 async function fetchGenresOptions() {
@@ -46,8 +68,10 @@ async function fetchProducts(params: {
     baseUrl: process.env.NEXT_PUBLIC_API_BASE
   });
   try {
-    const res = await api.list<{ id: number } & Product>("/products", params, { cache: "no-store" });
-    return res;
+    const res = await api.list<any>("/products", params, { cache: "no-store" });
+    const raw = Array.isArray((res as any)?.data) ? (res as any).data : (Array.isArray(res) ? (res as any) : []);
+    const mapped = raw.map(mapApiProductToProduct);
+    return { data: mapped, meta: (res as any)?.meta } as { data: Product[]; meta: any };
   } catch (e) {
     return { data: [], meta: { page: params.page, limit: params.limit, total: 0, totalPages: 1 } } as { data: Product[]; meta: any };
   }
@@ -109,7 +133,7 @@ export default async function ShopPage({ searchParams }: { searchParams?: Search
               />
             ) : (
               <>
-                <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
+                <div className="w-full grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
                   {items.map((product) => (
                     <ProductCard key={product.id} data={product as Product} />
                   ))}

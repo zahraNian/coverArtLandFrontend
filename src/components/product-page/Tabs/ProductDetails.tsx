@@ -24,10 +24,11 @@ const specsData: SpecItem[] = [
   },
 ];
 
-const ProductDetails = () => {
+const ProductDetails = ({ items }: { items?: SpecItem[] }) => {
+  const data = items && items.length ? items : specsData;
   return (
     <>
-      {specsData.map((item, i) => (
+      {data.map((item, i) => (
         <div className="grid grid-cols-3" key={i}>
           <div>
             <p className="text-sm py-3 w-full leading-7 lg:py-2 pr-2 text-neutral-500">

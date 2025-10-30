@@ -38,7 +38,7 @@ const Header = () => {
             transition={{ delay: 1, duration: 0.6 }}
           >
             <Link
-              href="/shop"
+              href="/products"
               className="w-full md:w-56 mb-5 md:mb-12 inline-block text-center bg-black hover:bg-black/80 transition-all text-white px-14 py-4 rounded-lg hover:animate-pulse"
             >
               Browse Gallery

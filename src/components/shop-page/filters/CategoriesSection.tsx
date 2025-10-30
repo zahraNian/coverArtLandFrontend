@@ -10,23 +10,23 @@ type Category = {
 const categoriesData: Category[] = [
   {
     title: "T-shirts",
-    slug: "/shop?category=t-shirts",
+    slug: "/products?category=t-shirts",
   },
   {
     title: "Shorts",
-    slug: "/shop?category=shorts",
+    slug: "/products?category=shorts",
   },
   {
     title: "Shirts",
-    slug: "/shop?category=shirts",
+    slug: "/products?category=shirts",
   },
   {
     title: "Hoodie",
-    slug: "/shop?category=hoodie",
+    slug: "/products?category=hoodie",
   },
   {
     title: "Jeans",
-    slug: "/shop?category=jeans",
+    slug: "/products?category=jeans",
   },
 ];
 

@@ -6,6 +6,7 @@ import RetryError from "@/components/common/RetryError";
 import NoDataFound from "@/components/common/NoDataFound";
 import { BaseApiService } from "@/lib/api";
 import { Product } from "@/types/product.types";
+import { assetUrl } from "@/config/images";
 
 export default function ProductsSection({
   title,
@@ -34,14 +35,36 @@ export default function ProductsSection({
     return s ? `?${s}` : "";
   }, [params, limit]);
 
+  const mapApiProductToProduct = (p: any): Product => {
+    const assets = Array.isArray(p?.assets) ? p.assets : [];
+    const primary = assets.find((a: any) => a?.isPrimary) || assets[0];
+    const gallery = assets.map((a: any) => assetUrl(a?.storageKey)).filter(Boolean);
+    const base = parseFloat(p?.basePrice ?? 0);
+    const current = parseFloat(((p?.currentPrice ?? base) || 0) as any);
+    const percentage = base > 0 && current < base ? Math.round(((base - current) / base) * 100) : 0;
+    const amount = base > 0 && current < base ? Math.max(0, base - current) : 0;
+    const tags = Array.isArray(p?.categories) ? p.categories.map((c: any) => c?.name || c?.slug).filter(Boolean) : [];
+    return {
+      id: p?.id ?? p?._id ?? p?.slug ?? "",
+      title: p?.title ?? p?.name ?? "",
+      srcUrl: assetUrl(primary?.storageKey) || "/images/pic1.png",
+      gallery,
+      price: Number.isFinite(current) ? current : 0,
+      discount: { amount, percentage },
+      rating: Number.isFinite(p?.rating) ? Number(p.rating) : 0,
+      tags,
+    } as Product;
+  };
+
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const api = new BaseApiService({ baseUrl: process.env.NEXT_PUBLIC_API_BASE });
       const res: any = await api.get<any>(`${endpoint}${qs}`, { cache: "no-store" });
-      const data = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
-      setItems(data as Product[]);
+      const raw = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+      const mapped = raw.map(mapApiProductToProduct);
+      setItems(mapped);
     } catch (e: any) {
       setError(e?.message || "Failed to load products");
     } finally {
@@ -72,3 +95,4 @@ export default function ProductsSection({
     </section>
   );
 }
+

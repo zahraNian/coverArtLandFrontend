@@ -20,7 +20,7 @@ export default function NavbarSearch() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const isShop = pathname?.startsWith("/shop");
+  const isShop = pathname?.startsWith("/products");
   const initial = useMemo(() => searchParams?.get("q") ?? "", [searchParams]);
   const [term, setTerm] = useState<string>(initial);
   const debounced = useDebouncedValue(term, 450);
@@ -33,7 +33,7 @@ export default function NavbarSearch() {
 
   useEffect(() => {
     if (isShop === undefined) return;
-    // When typing, route to /shop with q param; if empty, drop q
+    // When typing, route to /products with q param; if empty, drop q
     const sp = new URLSearchParams(searchParams?.toString());
     if (debounced && debounced.trim().length > 0) {
       sp.set("q", debounced.trim());
@@ -41,14 +41,14 @@ export default function NavbarSearch() {
       sp.delete("q");
     }
     const qs = sp.toString();
-    const href = qs ? `/shop?${qs}#search` : "/shop#search";
+    const href = qs ? `/products?${qs}#search` : "/products#search";
     if (debounced !== initial) {
       router.push(href);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);
 
-  // Hide search controls on the shop page (requirement)
+  // Hide search controls on the products page (requirement)
   if (isShop) return null;
 
   return (
@@ -74,8 +74,8 @@ export default function NavbarSearch() {
         />
       </InputGroup>
 
-      {/* Mobile search icon also hides on /shop by returning null above */}
-      <Link href="/shop#search" className="lg:hidden block md:hidden mr-[14px] p-1">
+      {/* Mobile search icon also hides on /products by returning null above */}
+      <Link href="/products#search" className="lg:hidden block md:hidden mr-[14px] p-1">
         <Image
           priority
           src="/icons/search-black.svg"

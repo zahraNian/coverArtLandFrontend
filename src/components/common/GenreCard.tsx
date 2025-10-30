@@ -8,7 +8,7 @@ type ProductCardProps = {
 };
 
 const ProductCard = ({ data }: ProductCardProps) => {
-  const href = `/shop?genres=${encodeURIComponent(data.slug)}`
+  const href = `/products?genres=${encodeURIComponent(data.slug)}`
   return (
     <Link
       href={href}
